@@ -75,7 +75,10 @@ To simulate live chat feature, open another terminal and run `npm start`. When t
 Would you like to run the app on another port instead? » (Y/n)
 ```
 User A has to go to User B profile and then click the chat button.  
-Live Demo of the live chat feature can be found in this [link](https://youtu.be/_mMSghv22YM). 
+
+Live Demo of the live chat feature can be found in this [link](https://youtu.be/_mMSghv22YM).  
+Live Demo for the other features can be found [here](https://youtu.be/rszNT5oMv-k).
+
 ### Dummy Login Credentials
 1. Email: `ghostkirito84@gmail.com` , Password: `admin1234`
 2. Email: `nicholasgandhi84@gmail.com` , Password: `admin123`
