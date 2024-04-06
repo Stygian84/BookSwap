@@ -1,3 +1,6 @@
+# Features
+1. Sign-In and Register Account using Firebase Authentication and FireStore
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
