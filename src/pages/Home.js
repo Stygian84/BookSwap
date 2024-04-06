@@ -136,16 +136,16 @@ function HomeContent() {
         // Logic to search only from start letter n subsequent
         const q = query(
           collection(firestore, "images"),
-          where("title", ">=", searchTerm.trim()),
+          where("title", ">=", searchTerm.trim().toUpperCase()),
           orderBy("title"),
-          startAt(searchTerm.trim())
+          startAt(searchTerm.trim().toUpperCase())
         );
         const querySnapshot = await getDocs(q);
         searchResults = await Promise.all(
           querySnapshot.docs.map(async (doc) => {
             const userData = await getUserData(doc.data().uid);
             const data = doc.data();
-            if (data.title.toLowerCase().startsWith(searchTerm.trim().toLowerCase())) {
+            if (data) {
               return {
                 id: doc.id,
                 userName: userData.name,
