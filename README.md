@@ -47,6 +47,7 @@
 - Add feature for users to indicate book condition (new, read once, well-loved, lightly annotated, heavily annotated)
 
 # Versions
+**Windows:** 10 Version 22H2 (OS Build 19045.4170)  
 **Node :** v20.11.0  
 **npm :** v10.2.3
 
@@ -59,20 +60,75 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+## How To Run
+### Install Node.js and npm
+Node.js can be downloaded from [here](https://nodejs.org/en/download).  
+Installation guide can be found in this [blog](https://radixweb.com/blog/installing-npm-and-nodejs-on-windows-and-mac).
+### Check if Node.js and npm are installed properly
+Go to command prompt (press `Win Key + X` , then press `a`). 
 
-In the project directory, you can run:
+```bash
+node -v  
+npm -v
+```
+It should output the installed versions
+```bash
+v20.11.0
+10.2.3
+```
+### Git Clone and Install Necessary Modules
+Git clone this repo  
+Go to the root project directory and run `npm install`
+```bash
+git clone https://github.com/Stygian84/BookSwap.git
+cd BookSwap
+npm install
+```
+### Place `.env` file and `npm start`
+Place `.env` file in the root project directory (inside BookSwap folder).  
+Then, to start development process, run 
+```bash
+npm start
+```
+This should be the expected output
+```bash
+Compiled successfully!
 
-### `npm start`
+You can now view BookSwap in the browser.        
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+  Local:            http://localhost:3000        
+  On Your Network:  http://10.32.50.156:3000     
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Note that the development build is not optimized.
+To create a production build, use npm run build. 
+
+webpack compiled successfully
+```
+### Finish
+The web app should open automatically on your default browser.  
+If it doesn't open automatically, 
+open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+
 
 ## Important Note
-**Please Note:** The functionality may not be fully supported on iOS devices and the Safari browser.
+**Please Note:** The functionality may not be fully supported on iOS devices and the Safari browser. 
+The web application is also designed to be compatible with laptop devices.
 
+# FAQ
+If you encounter the error below, ensure `.env` is stored in the root project directory.
+```
+Installations: Missing App configuration value: "projectId" (installations/missing-app-config-values).
+FirebaseError: Installations: Missing App configuration value: "projectId" (installations/missing-app-config-values).
+```
+`.env` file should have these parameters
+```
+REACT_APP_FIREBASE_API_KEY
+REACT_APP_FIREBASE_AUTH_DOMAIN
+REACT_APP_FIREBASE_PROJECT_ID
+REACT_APP_FIREBASE_STORAGE_BUCKET
+REACT_APP_FIREBASE_MESSAGING_SENDER_ID
+REACT_APP_FIREBASE_APP_ID
+REACT_APP_FIREBASE_MEASUREMENT_ID
+```
 
 
