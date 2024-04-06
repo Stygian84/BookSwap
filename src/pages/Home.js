@@ -188,7 +188,7 @@ function HomeContent() {
                   height="300"
                   image={item.imageURL}
                   alt={item.title}
-                  style={{ cursor: "pointer" }} // Add pointer cursor on hover
+                  style={{ cursor: "pointer" }} 
                 />
               </Link>
               <CardContent style={{ height: "100%" }}>

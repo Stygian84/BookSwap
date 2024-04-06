@@ -13,7 +13,7 @@ import {
   CardContent,
   Grid,
 } from "@mui/material";
-
+import { Link as RouterLink } from "react-router-dom";
 import StarIcon from "@mui/icons-material/Star";
 import StarOutlineIcon from "@mui/icons-material/StarOutline";
 import {
@@ -191,12 +191,15 @@ function OfferedBooks({ userID }) {
           <Grid item key={item.id} xs={12} sm={6} md={4} lg={3}>
             {/* Card container */}
             <Card style={{ height: "100%", textAlign: "left" }}>
-              <CardMedia
-                component="img"
-                height="300"
-                image={item.imageURL} // Use item's imageURL property as the image URL
-                alt={item.title} // Use item's title as the alt text for the image
-              />
+              <Link component={RouterLink} to={"/details"} state={item}>
+                <CardMedia
+                  component="img"
+                  height="300"
+                  image={item.imageURL}
+                  alt={item.title}
+                  style={{ cursor: "pointer" }}
+                />
+              </Link>
               <CardContent style={{ height: "100%" }}>
                 <Typography
                   gutterBottom
