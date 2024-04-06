@@ -39,6 +39,7 @@ import {
 import bookCategories from "../utils/categories";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase";
+import { Link as RouterLink } from "react-router-dom";
 
 function HomeTop() {
   return (
@@ -179,12 +180,15 @@ function HomeContent() {
           <Grid item key={item.id} xs={12} sm={6} md={4} lg={3}>
             {/* Card container */}
             <Card>
-              <CardMedia
-                component="img"
-                height="300"
-                image={item.imageURL} // Use item's imageURL property as the image URL
-                alt={item.title} // Use item's title as the alt text for the image
-              />
+              <Link component={RouterLink} to={"/details"} state={item}>
+                <CardMedia
+                  component="img"
+                  height="300"
+                  image={item.imageURL}
+                  alt={item.title}
+                  style={{ cursor: "pointer" }} // Add pointer cursor on hover
+                />
+              </Link>
               <CardContent>
                 <Typography
                   gutterBottom
@@ -321,6 +325,7 @@ function UploadDialog({ open, handleClose }) {
         uid: uid,
         imageURL: downloadURL,
         createdAt: new Date().toString(),
+        booked: false
       };
       // Add the document to the collection
       const newDocRef = await addDoc(myCollection, myDocumentData);

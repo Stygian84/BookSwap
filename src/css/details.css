@@ -1,0 +1,35 @@
+.details-container {
+  display: flex;
+  flex-direction: column;
+  padding: 2.5%;
+  margin: 2.5%;
+  border-radius: 40px;
+}
+
+.picture-container {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 20px;
+}
+
+.picture {
+  flex: 0;
+  margin-right: 5%;
+}
+.picture img {
+  height: 50vh;
+  width: 30vw;
+  border-radius: 10px;
+}
+.text-container {
+  display: flex;
+  flex-direction: column;
+}
+.text-container > p {
+  margin-bottom: 10px;
+}
+
+.synopsis,
+.comment {
+  margin-top: 20px;
+}

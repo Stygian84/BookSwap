@@ -7,6 +7,7 @@ import { Divider } from "@mui/material";
 import { HomeContent, HomeTop } from './pages/Home.js';
 import RegisterContent from './pages/Register.js';
 import { ProfileContent } from './pages/Profile.js';
+import DetailsContent from './pages/Details.js';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -24,6 +25,7 @@ function Top(){
     <Routes>
       <Route path="/home" exact element={<HomeTop />} />
       <Route path="/profile" exact element={<HomeTop />} />
+      <Route path="/details" exact element={<HomeTop />} />
     </Routes>
   );
 }
@@ -35,7 +37,7 @@ function Content() {
       <Route path="/register" exact element={<RegisterContent />} />
       <Route path="/home" exact element={<HomeContent />} />
       <Route path="/profile" exact element={<ProfileContent />} />
-
+      <Route path="/details" exact element={<DetailsContent />} />
     </Routes>
   );
 }
