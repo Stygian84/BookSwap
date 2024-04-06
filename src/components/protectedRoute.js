@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Navigate } from 'react-router-dom';
-import { isAuthenticated } from '../firebase'; // Assuming you have a function to check authentication status
+import { isAuthenticated } from '../firebase'; 
 
 const ProtectedRoute = ({ path, element }) => {
   return (

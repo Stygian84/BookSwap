@@ -14,7 +14,7 @@ function DetailsContent() {
   const [booked, setBooked] = useState(item.booked);
   const [userID, setUserID] = useState();
   const [rated, setRated] = useState(false);
-  
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
@@ -64,7 +64,7 @@ function DetailsContent() {
     };
 
     fetchData();
-  }, [booked, rated]);
+  }, [booked, rated, item.id]);
 
   const handleRatingChange = async (rating) => {
     try {

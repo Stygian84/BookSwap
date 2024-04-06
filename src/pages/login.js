@@ -1,8 +1,8 @@
-import { Container, Typography, TextField, Button, Link } from '@mui/material';
-import { Link as RouterLink, Navigate } from 'react-router-dom';
-import { useState } from 'react';
+import { Container, Typography, TextField, Button, Link } from "@mui/material";
+import { Link as RouterLink, Navigate } from "react-router-dom";
+import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from '../firebase';
+import { auth } from "../firebase";
 
 function LoginContent() {
   const [email, setEmail] = useState("");
@@ -25,7 +25,7 @@ function LoginContent() {
   }
 
   return (
-    <Container maxWidth="sm" style={{ marginTop: '100px' }}>
+    <Container maxWidth="sm" style={{ marginTop: "100px" }}>
       <Typography variant="h4" gutterBottom>
         Login
       </Typography>
@@ -47,31 +47,23 @@ function LoginContent() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          size="large"
-          fullWidth
-          style={{ marginTop: '20px' }}
-        >
+        <Button type="submit" variant="contained" color="primary" size="large" fullWidth style={{ marginTop: "20px" }}>
           Login
         </Button>
       </form>
-      <Typography variant="body1" style={{ marginTop: '20px' }}>
-        Not a registered user?{' '}
+      <Typography variant="body1" style={{ marginTop: "20px" }}>
+        Not a registered user?{" "}
         <Link component={RouterLink} to="/register">
           Register here
         </Link>
       </Typography>
       {error && (
-        <Typography variant="body1" color="error" style={{ marginTop: '20px' }}>
+        <Typography variant="body1" color="error" style={{ marginTop: "20px" }}>
           {error}
         </Typography>
       )}
     </Container>
   );
 }
-
 
 export default LoginContent;

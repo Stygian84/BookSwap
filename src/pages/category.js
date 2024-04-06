@@ -1,22 +1,8 @@
-import {
-  Typography,
-  AppBar,
-  Toolbar,
-  Button,
-  Link,
-  Grid,
-  Avatar,
-  TextField,
-  Card,
-  CardContent,
-  CardMedia,
-  Chip,
-  Box,
-} from "@mui/material";
+import { Typography, Button, Link, Grid, Card, CardContent, CardMedia, Chip, Box } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import "../css/home.css";
 import { firestore } from "../firebase";
-import { doc, collection, getDocs, query, where, orderBy, startAt, getDoc } from "firebase/firestore";
+import { doc, collection, getDocs, query, where, getDoc } from "firebase/firestore";
 import { Link as RouterLink } from "react-router-dom";
 import StarIcon from "@mui/icons-material/Star";
 import UploadDialog from "../components/uploadDialog";
@@ -27,7 +13,6 @@ const locations = ["East", "West", "Central", "North"];
 function CategoryContent() {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
 
@@ -46,70 +31,55 @@ function CategoryContent() {
     return userDocSnapshot.exists() ? userDocSnapshot.data() : null;
   }
 
-  // Initial Query Display and Update after Upload
-  const getAllImageURLs = async () => {
-    try {
-      let querySnapshot;
-      if (selectedCategory && selectedLocation) {
-        // Filter by both category and location
-        querySnapshot = await getDocs(
-          query(
-            collection(firestore, "images"),
-            where("category", "==", selectedCategory),
-            where("location", "==", selectedLocation)
-          )
-        );
-      } else if (selectedCategory) {
-        // Filter only by category
-        querySnapshot = await getDocs(
-          query(collection(firestore, "images"), where("category", "==", selectedCategory))
-        );
-      } else if (selectedLocation) {
-        // Filter only by location
-        querySnapshot = await getDocs(
-          query(collection(firestore, "images"), where("location", "==", selectedLocation))
-        );
-      } else {
-        // No filters applied
-        querySnapshot = await getDocs(collection(firestore, "images"));
-      }
-
-      const imageData = await Promise.all(
-        querySnapshot.docs.map(async (doc) => {
-          const userData = await getUserData(doc.data().uid);
-          return {
-            id: doc.id,
-            userName: userData.name,
-            rating: userData.rating,
-            ...doc.data(),
-          };
-        })
-      );
-
-      setData(imageData);
-    } catch (error) {
-      console.error("Error getting image URLs:", error);
-    }
-  };
-
   useEffect(() => {
+    // Initial Query Display and Update after Upload
+    const getAllImageURLs = async () => {
+      try {
+        let querySnapshot;
+        if (selectedCategory && selectedLocation) {
+          // Filter by both category and location
+          querySnapshot = await getDocs(
+            query(
+              collection(firestore, "images"),
+              where("category", "==", selectedCategory),
+              where("location", "==", selectedLocation)
+            )
+          );
+        } else if (selectedCategory) {
+          // Filter only by category
+          querySnapshot = await getDocs(
+            query(collection(firestore, "images"), where("category", "==", selectedCategory))
+          );
+        } else if (selectedLocation) {
+          // Filter only by location
+          querySnapshot = await getDocs(
+            query(collection(firestore, "images"), where("location", "==", selectedLocation))
+          );
+        } else {
+          // No filters applied
+          querySnapshot = await getDocs(collection(firestore, "images"));
+        }
+
+        const imageData = await Promise.all(
+          querySnapshot.docs.map(async (doc) => {
+            const userData = await getUserData(doc.data().uid);
+            return {
+              id: doc.id,
+              userName: userData.name,
+              rating: userData.rating,
+              ...doc.data(),
+            };
+          })
+        );
+
+        setData(imageData);
+      } catch (error) {
+        console.error("Error getting image URLs:", error);
+      }
+    };
+
     getAllImageURLs();
   }, [open, selectedCategory, selectedLocation]);
-
-  // Filter Function
-  const handleFilter = () => {
-    let filteredData = [...data];
-
-    if (selectedCategory) {
-      filteredData = filteredData.filter((item) => item.category === selectedCategory);
-    }
-
-    if (selectedLocation) {
-      filteredData = filteredData.filter((item) => item.location === selectedLocation);
-    }
-
-    setData(filteredData);
-  };
 
   return (
     <div className="home-content">

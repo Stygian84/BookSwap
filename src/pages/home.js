@@ -16,17 +16,8 @@ import {
 import React, { useState, useEffect } from "react";
 import LogoImage from "../images/logo.png";
 import "../css/home.css";
-import {  firestore } from "../firebase";
-import {
-  doc,
-  collection,
-  getDocs,
-  query,
-  where,
-  orderBy,
-  startAt,
-  getDoc,
-} from "firebase/firestore";
+import { firestore } from "../firebase";
+import { collection, getDocs, query, where, orderBy, startAt } from "firebase/firestore";
 import { Link as RouterLink } from "react-router-dom";
 import StarIcon from "@mui/icons-material/Star";
 import UploadDialog from "../components/uploadDialog";
@@ -68,7 +59,6 @@ function HomeContent() {
     setOpen(true);
   };
 
-
   // Initial Query Display and Update after Upload
   const getAllImageURLs = async () => {
     try {
@@ -98,7 +88,7 @@ function HomeContent() {
 
   // Search Function
   const handleSearch = async (e) => {
-    if (e.key === "Enter" && searchTerm.trim() == "") {
+    if (e.key === "Enter" && searchTerm.trim() === "") {
       getAllImageURLs();
     }
     if (e.key === "Enter" && searchTerm.trim() !== "") {
@@ -165,13 +155,13 @@ function HomeContent() {
         {data.map((item) => (
           <Grid item key={item.id} xs={12} sm={6} md={4} lg={3}>
             <Card style={{ height: "100%" }}>
-              <Link component={RouterLink} to={"/details"} state={item} >
+              <Link component={RouterLink} to={"/details"} state={item}>
                 <CardMedia
                   component="img"
                   height="300"
                   image={item.imageURL}
                   alt={item.title}
-                  style={{ cursor: "pointer" }} 
+                  style={{ cursor: "pointer" }}
                 />
               </Link>
               <CardContent style={{ height: "100%" }}>
@@ -251,6 +241,5 @@ function HomeContent() {
     </div>
   );
 }
-
 
 export { HomeTop, HomeContent };
