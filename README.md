@@ -67,19 +67,19 @@ Installation guide can be found in this [blog](https://radixweb.com/blog/install
 ### Check if Node.js and npm are installed properly
 Go to command prompt (press `Win Key + X` , then press `a`). 
 
-```bash
+```
 node -v  
 npm -v
 ```
 It should output the installed versions
-```bash
+```
 v20.11.0
 10.2.3
 ```
 ### Git Clone and Install Necessary Modules
 Git clone this repo  
 Go to the root project directory and run `npm install`
-```bash
+```shell
 git clone https://github.com/Stygian84/BookSwap.git
 cd BookSwap
 npm install
@@ -87,11 +87,11 @@ npm install
 ### Place `.env` file and `npm start`
 Place `.env` file in the root project directory (inside BookSwap folder).  
 Then, to start development process, run 
-```bash
+```p
 npm start
 ```
 This should be the expected output
-```bash
+```
 Compiled successfully!
 
 You can now view BookSwap in the browser.        
@@ -121,7 +121,7 @@ Installations: Missing App configuration value: "projectId" (installations/missi
 FirebaseError: Installations: Missing App configuration value: "projectId" (installations/missing-app-config-values).
 ```
 `.env` file should have these parameters
-```
+```js
 REACT_APP_FIREBASE_API_KEY
 REACT_APP_FIREBASE_AUTH_DOMAIN
 REACT_APP_FIREBASE_PROJECT_ID
