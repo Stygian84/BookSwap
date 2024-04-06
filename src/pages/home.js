@@ -28,7 +28,8 @@ function HomeTop() {
     <AppBar position="static">
       <Toolbar>
         <Link
-          href="/home"
+          component={RouterLink}
+          to="/home"
           color="inherit"
           underline="none"
           sx={{ display: "flex", alignItems: "center", marginRight: "10px" }}
@@ -40,13 +41,13 @@ function HomeTop() {
         </Link>
         <Box sx={{ flexGrow: 1 }} />
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Link href="/home" color="inherit" underline="none" sx={{ marginRight: "10px" }}>
+          <Link component={RouterLink} to="/home" color="inherit" underline="none" sx={{ marginRight: "10px" }}>
             Browse
           </Link>
-          <Link href="/category" color="inherit" underline="none" sx={{ marginRight: "10px" }}>
+          <Link component={RouterLink} to="/category" color="inherit" underline="none" sx={{ marginRight: "10px" }}>
             Categories
           </Link>
-          <Link href="/profile" color="inherit" underline="none" state={null}>
+          <Link component={RouterLink} to="/profile" color="inherit" underline="none" state={null}>
             My Profile
           </Link>
         </Box>
