@@ -46,7 +46,7 @@ function HomeTop() {
           <Link href="/category" color="inherit" underline="none" sx={{ marginRight: "10px" }}>
             Categories
           </Link>
-          <Link href="/profile" color="inherit" underline="none">
+          <Link href="/profile" color="inherit" underline="none" state={null}>
             My Profile
           </Link>
         </Box>

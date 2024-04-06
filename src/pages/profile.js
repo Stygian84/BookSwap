@@ -12,41 +12,39 @@ import Chat from "../utils/chat";
 function ProfileContent() {
   const location = useLocation();
   const viewedUser = location.state;
+  console.log(viewedUser);
   const [userData, setUserData] = useState(null);
   const [showOfferedBooks, setShowOfferedBooks] = useState(true);
   const [showBorrowedBooks, setShowBorrowedBooks] = useState(false);
-  const [userID, setUserID] = useState();
   const [myUserID, setMyUserID] = useState();
   const [viewedUserID, setViewedUserID] = useState();
-
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
-        setUserID(user.uid);
-        const fetchUserData = async () => {
-          const fetchedUserData = await getUserData(user.uid);
-          setUserData(fetchedUserData);
-        };
-        fetchUserData();
-        setMyUserID(user.uid);
+        setMyUserID(user.uid); 
+        if (!viewedUser) {
+          await fetchUserData(user.uid); 
+        }
       } else {
         console.log("User not logged in.");
       }
     });
-
+  
     return () => unsubscribe();
-  }, []);
-
-  // if not me, view someone else
+  }, [viewedUser]); 
+  
+  async function fetchUserData(userId) {
+    try {
+      const fetchedUserData = await getUserData(userId);
+      setUserData(fetchedUserData);
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  }
   useEffect(() => {
     if (viewedUser) {
-      setUserID(viewedUser.uid);
       setViewedUserID(viewedUser.uid);
-      const fetchUserData = async () => {
-        const fetchedUserData = await getUserData(viewedUser.uid);
-        setUserData(fetchedUserData);
-      };
-      fetchUserData();
+      fetchUserData(viewedUser.uid); 
     }
   }, [viewedUser]);
   return (
@@ -102,7 +100,7 @@ function ProfileContent() {
                 {showBorrowedBooks ? "Hide Borrowed Book History" : "Show Borrowed Book History"}
               </Button>
             </Box>
-            {showOfferedBooks && <OfferedBooks userID={userID} />}
+            {showOfferedBooks && <OfferedBooks userID={viewedUser ? viewedUserID : myUserID} />}
 
             {showBorrowedBooks && <BorrowedBookHistory />}
           </Box>
