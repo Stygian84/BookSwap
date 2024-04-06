@@ -73,7 +73,7 @@ Live Demo of the live chat feature can be found in this link.
 ### Dummy Login Credentials
 1. Email: `ghostkirito84@gmail.com` , Password: `admin1234`
 2. Email: `nicholasgandhi84@gmail.com` , Password: `admin1234`
-3. Email: `stygian456@gmail.com` , Password: `admin1234`  
+3. Email: `1005295@mymail.sutd.edu.sg` , Password: `admin1234`  
 
 **Note :** You can also register your own email or any valid email to register as a user.  
 
