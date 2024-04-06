@@ -13,10 +13,10 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## How To Run
-### Install Node.js and npm
+### 1. Install Node.js and npm
 Node.js can be downloaded from [here](https://nodejs.org/en/download).  
 Installation guide can be found in this [blog](https://radixweb.com/blog/installing-npm-and-nodejs-on-windows-and-mac).
-### Check if Node.js and npm are installed properly
+### 2. Check if Node.js and npm are installed properly
 Go to command prompt (press `Win Key + X` , then press `a`). 
 
 ```
@@ -28,7 +28,7 @@ It should output the installed versions
 v20.11.0
 10.2.3
 ```
-### Git Clone and Install Necessary Modules
+### 3. Git Clone and Install Necessary Modules
 Git clone this repo  
 Go to the root project directory and run `npm install`
 ```shell
@@ -36,7 +36,7 @@ git clone https://github.com/Stygian84/BookSwap.git
 cd BookSwap
 npm install
 ```
-### Place `.env` file in root directory and Run `npm start`
+### 4. Place `.env` file in root directory and Run `npm start`
 Place `.env` file in the root project directory (inside BookSwap folder).  
 Then, to start development process, run 
 ```p
@@ -56,12 +56,12 @@ To create a production build, use npm run build.
 
 webpack compiled successfully
 ```
-### Finish
+### 5. Finish
 The web app should open automatically on your default browser.  
 If it doesn't open automatically, 
 open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-### Live Chat
+### 6. Live Chat
 To simulate live chat feature, open another terminal and run `npm start`. When this prompt below appears, press `Y`.
 ```
 ? Something is already running on port 3000.
