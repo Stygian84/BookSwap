@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useLocation,Link as RouterLink  } from "react-router-dom";
+import { useLocation, Link as RouterLink } from "react-router-dom";
 import { Box, Typography, Button, Link, Card, Chip, CardMedia, CardContent, Grid } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 import { collection, getDocs, query, where } from "firebase/firestore";
@@ -142,7 +142,7 @@ function OfferedBooks({ userID }) {
   };
   useEffect(() => {
     getBooksData(userID);
-  }, []);
+  }, [userID]);
 
   return (
     <Box marginTop="20px">
@@ -166,7 +166,7 @@ function OfferedBooks({ userID }) {
                       left: 0,
                       width: "100%",
                       height: "100%",
-                      backgroundColor: "rgba(0, 0, 0, 0.5)", 
+                      backgroundColor: "rgba(0, 0, 0, 0.5)",
                       zIndex: 1,
                     }}
                   ></div>
