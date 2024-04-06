@@ -6,6 +6,7 @@ import { firestore, auth } from "../firebase";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
 import getUserData from "../utils/getUserData";
 import "../css/details.css";
+import "../css/spoiler.css";
 
 function DetailsContent() {
   const location = useLocation();
@@ -13,6 +14,11 @@ function DetailsContent() {
   const [booked, setBooked] = useState(item.booked);
   const [userID, setUserID] = useState();
   const [rated, setRated] = useState(false);
+  const [revealed, setRevealed] = useState(false);
+
+  const toggleReveal = () => {
+    setRevealed(!revealed);
+  };
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
@@ -144,11 +150,16 @@ function DetailsContent() {
       <div className="synopsis">
         <Typography variant="h3">Synopsis</Typography>
         {/* Add synopsis content here */}
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-        magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-        pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
-        laborum."
+        <div className={`spoiler-content ${revealed ? "revealed" : ""}`} onClick={toggleReveal}>
+          {!revealed && <div className="click-to-reveal">Click to reveal</div>}
+          <div className="content">
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+            dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
+            ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+            nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit
+            anim id est laborum."
+          </div>
+        </div>
       </div>
       <div className="comment">
         <Typography variant="h3">Comment Section</Typography>
