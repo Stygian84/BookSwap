@@ -30,6 +30,7 @@ import {
 import { Link as RouterLink } from "react-router-dom";
 import StarIcon from "@mui/icons-material/Star";
 import UploadDialog from "../components/uploadDialog";
+import getUserData from "../utils/getUserData";
 
 function HomeTop() {
   return (
@@ -67,12 +68,6 @@ function HomeContent() {
     setOpen(true);
   };
 
-  // To get userData based on uid of the books
-  async function getUserData(uid) {
-    const userDocRef = doc(collection(firestore, "users"), uid);
-    const userDocSnapshot = await getDoc(userDocRef);
-    return userDocSnapshot.exists() ? userDocSnapshot.data() : null;
-  }
 
   // Initial Query Display and Update after Upload
   const getAllImageURLs = async () => {
@@ -84,7 +79,7 @@ function HomeContent() {
           return {
             id: doc.id,
             userName: userData.name,
-            rating: userData.rating,
+            userRating: userData.rating,
             ...doc.data(),
           };
         })
@@ -138,6 +133,7 @@ function HomeContent() {
               return {
                 id: doc.id,
                 userName: userData.name,
+                userRating: userData.rating,
                 ...data,
               };
             }
@@ -218,7 +214,7 @@ function HomeContent() {
                 >
                   <span style={{ fontStyle: "italic" }}>{item.userName}</span>
                   <div style={{ display: "flex", alignItems: "center" }}>
-                    {item.rating}
+                    {item.userRating}
                     <StarIcon sx={{ color: "#FDCC0D" }} />
                   </div>
                 </Typography>

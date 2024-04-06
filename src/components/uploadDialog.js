@@ -19,11 +19,11 @@ import { addDoc, collection } from "firebase/firestore";
 import bookCategories from "../utils/categories";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase";
+import getUserData from "../utils/getUserData";
 
 //Floating button on bottom right
 function UploadDialog({ open, handleClose }) {
   const [uid, setUid] = useState(null);
-  const [location,setLocation]=useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -38,7 +38,6 @@ function UploadDialog({ open, handleClose }) {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUid(user.uid);
-        setLocation(user.location);
       } else {
         setUid(null);
       }
@@ -67,6 +66,8 @@ function UploadDialog({ open, handleClose }) {
       setCategoryError("Please select a category");
       return;
     }
+    // Get user location
+    const userData = await getUserData(uid);
     try {
       // Upload image file to Firebase Storage
       let downloadURL;
@@ -80,7 +81,7 @@ function UploadDialog({ open, handleClose }) {
             note: note,
             category: category,
             uid: uid,
-            location:location,
+            location: userData.location,
             createdAt: new Date().toString(),
           },
         };
@@ -103,7 +104,9 @@ function UploadDialog({ open, handleClose }) {
         imageURL: downloadURL,
         createdAt: new Date().toString(),
         booked: false,
-        location: location,
+        location: userData.location,
+        count: 0,
+        rating: 0,
       };
       // Add the document to the collection
       const newDocRef = await addDoc(myCollection, myDocumentData);

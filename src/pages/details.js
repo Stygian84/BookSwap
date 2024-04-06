@@ -2,17 +2,15 @@ import { useLocation, Link as RouterLink } from "react-router-dom";
 import { Typography, Button } from "@mui/material";
 import { firestore, auth } from "../firebase";
 import { Link } from "@mui/material";
-import {
-  doc,
-  updateDoc
-} from "firebase/firestore";
+import { doc, updateDoc, getDoc } from "firebase/firestore";
 import "../css/details.css";
 import { useEffect, useState } from "react";
 import StarIcon from "@mui/icons-material/Star";
+import getUserData from "../utils/getUserData";
 
 function DetailsContent() {
   const location = useLocation();
-  const item = location.state;
+  const [item, setItem] = useState(location.state);
   const [booked, setBooked] = useState(item.booked);
   const [userID, setUserID] = useState();
   const [rated, setRated] = useState(false);
@@ -39,25 +37,49 @@ function DetailsContent() {
       console.error("Error updating document:", error);
     }
   };
-  // When book button is pressed, update UI
-  useEffect(() => {}, [booked]);
+
+  // When book button / Rating is pressed, update UI
+  useEffect(() => {
+    const fetchData = async () => {
+      const imageRef = doc(firestore, "images", item.id);
+
+      try {
+        const docSnapshot = await getDoc(imageRef);
+        if (docSnapshot.exists()) {
+          const userData = await getUserData(docSnapshot.data().uid);
+          const data = docSnapshot.data();
+          const result = {
+            id: docSnapshot.id,
+            userName: userData.name,
+            userRating: userData.rating,
+            ...data,
+          };
+          setItem(result);
+        } else {
+          console.log("No such document exists!");
+        }
+      } catch (error) {
+        console.error("Error getting document:", error);
+      }
+    };
+
+    fetchData();
+  }, [booked, rated]);
 
   const handleRatingChange = async (rating) => {
     try {
       const myDoc = doc(firestore, "images", item.id);
-      console.log(rating);
-      if (!item.bookRating) {
-        item.bookRating = 0;
+      if (!item.rating) {
+        item.rating = 0;
         await updateDoc(myDoc, { rating: 0, count: 0 });
       }
       let newCount, newAverage;
-      if (item.count === null) {
-        newCount = 1;
-        newAverage = rating;
-      } else {
-        newCount = item.count + 1;
-        newAverage = (item.bookRating * item.count + rating) / newCount;
+      if (!item.count) {
+        item.count = 0;
       }
+      newCount = item.count + 1;
+      newAverage = (item.rating * item.count + rating) / newCount;
+      console.log(newCount, newAverage);
       await updateDoc(myDoc, { rating: newAverage, count: newCount });
 
       console.log("Rating updated successfully");
@@ -66,6 +88,7 @@ function DetailsContent() {
       console.error("Error updating rating:", error);
     }
   };
+
   return (
     <div className="details-container">
       <div className="picture-container">
@@ -87,6 +110,9 @@ function DetailsContent() {
             </Typography>
             <Typography className="description-text">
               <strong>Description:</strong> {item.description}
+            </Typography>
+            <Typography className="description-text">
+              <strong>Location:</strong> {item.location.charAt(0).toUpperCase() + item.location.slice(1)}
             </Typography>
 
             <Button
