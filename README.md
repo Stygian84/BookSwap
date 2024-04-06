@@ -6,8 +6,23 @@
 5. [TODO] Chat System
 
 # Future Improvement
-1. Add More Categories in Categories
-2. Make Upload Button more user friendly similar to gdrive
+1. Recommendation based on preferences on the home page
+2. Review + Rating System (this guy returns in good condition)
+3. Spoiler Synopsis + Comments
+4. Preview (optional) first few pages
+5. Chat System (borrow how long) (in the chat -> feature to exchange books -> modify/agree/reject )
+6. GeoLocation (closest)
+7. Meet Up Feature (where to meet)
+8. Book Discussion Forum
+9. Report Feature
+10. References Feature (for research paper purposes)
+11. If you want to support this author, you can purchase the book here.
+12. Maybe make a rank system (?) for like influencer 
+13. TAGS 
+14. Languages
+15. Filter Searches : PG13 , LGBT , Mature Content Etc
+16. Add More Categories in Categories
+17. Make Upload Button more user friendly similar to gdrive
 
 # Versions
 Node : v20.11.0
