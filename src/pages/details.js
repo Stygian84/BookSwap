@@ -114,6 +114,11 @@ function DetailsContent() {
             <Typography className="description-text">
               <strong>Location:</strong> {item.location.charAt(0).toUpperCase() + item.location.slice(1)}
             </Typography>
+            {item.isbn !== "" && (
+              <Typography className="description-text">
+                <strong>ISBN:</strong> {item.isbn}
+              </Typography>
+            )}
 
             <Button
               variant="contained"

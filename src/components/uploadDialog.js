@@ -107,6 +107,7 @@ function UploadDialog({ open, handleClose }) {
         location: userData.location,
         count: 0,
         rating: 0,
+        isbn:isbn
       };
       // Add the document to the collection
       const newDocRef = await addDoc(myCollection, myDocumentData);
