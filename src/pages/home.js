@@ -161,69 +161,85 @@ function HomeContent() {
       <Grid container spacing={2}>
         {data.map((item) => (
           <Grid item key={item.id} xs={12} sm={6} md={4} lg={3}>
-            <Card style={{ height: "100%" }}>
-              <Link component={RouterLink} to={"/details"} state={item}>
-                <CardMedia
-                  component="img"
-                  height="300"
-                  image={item.imageURL}
-                  alt={item.title}
-                  style={{ cursor: "pointer" }}
-                />
-              </Link>
-              <CardContent style={{ height: "100%" }}>
-                <Typography
-                  gutterBottom
-                  variant="h5"
-                  component="div"
-                  style={{
-                    display: "-webkit-box",
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: "vertical",
-                    height: "60px",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                  }}
-                >
-                  {item.title}
-                </Typography>
-                <Chip
-                  label={item.category}
-                  color="primary"
-                  sx={{
-                    "&:hover": {
-                      bgcolor: "secondary.main",
-                      color: "primary.contrastText",
-                    },
-                    cursor: "pointer",
-                  }}
-                />
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                  }}
-                >
-                  <span style={{ fontStyle: "italic" }}>{item.userName}</span>
-                  <div style={{ display: "flex", alignItems: "center" }}>
-                    {item.userRating}
-                    <StarIcon sx={{ color: "#FDCC0D" }} />
-                  </div>
-                </Typography>
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  style={{ overflow: "hidden", textOverflow: "ellipsis" }}
-                >
-                  {item.description}
-                </Typography>
-              </CardContent>
-            </Card>
+            <Box position="relative" height="100%">
+              {/* Grey overlay for booked items */}
+              {item.booked && (
+                <Link component={RouterLink} to={"/details"} state={item}>
+                  <Box
+                    position="absolute"
+                    top={0}
+                    left={0}
+                    width="100%"
+                    height="100%"
+                    bgcolor="rgba(0, 0, 0, 0.5)"
+                    zIndex={1}
+                  />
+                </Link>
+              )}
+              <Card style={{ height: "100%" }}>
+                <Link component={RouterLink} to={"/details"} state={item}>
+                  <CardMedia
+                    component="img"
+                    height="300"
+                    image={item.imageURL}
+                    alt={item.title}
+                    style={{ cursor: "pointer" }}
+                  />
+                </Link>
+                <CardContent style={{ height: "100%" }}>
+                  <Typography
+                    gutterBottom
+                    variant="h5"
+                    component="div"
+                    style={{
+                      display: "-webkit-box",
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: "vertical",
+                      height: "60px",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
+                    {item.title}
+                  </Typography>
+                  <Chip
+                    label={item.category}
+                    color="primary"
+                    sx={{
+                      "&:hover": {
+                        bgcolor: "secondary.main",
+                        color: "primary.contrastText",
+                      },
+                      cursor: "pointer",
+                    }}
+                  />
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
+                    <span style={{ fontStyle: "italic" }}>{item.userName}</span>
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      {item.userRating}
+                      <StarIcon sx={{ color: "#FDCC0D" }} />
+                    </div>
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    style={{ overflow: "hidden", textOverflow: "ellipsis" }}
+                  >
+                    {item.description}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Box>
           </Grid>
         ))}
       </Grid>

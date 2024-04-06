@@ -65,7 +65,6 @@ function ProfileContent() {
               <strong>Phone:</strong> {userData.phoneNumber}
             </Typography>
             <StarRating rating={userData.rating} />
-
             <Typography variant="body1">
               <strong> {userData.rating} / 5.0</strong>
             </Typography>
@@ -101,7 +100,11 @@ function ProfileContent() {
           // Prompt to login
           <Box>
             <Typography variant="h5" textAlign={"center"}>
-              You are not logged in, <Link component={RouterLink} to="/">click here to login</Link>.
+              You are not logged in,{" "}
+              <Link component={RouterLink} to="/">
+                click here to login
+              </Link>
+              .
             </Typography>
           </Box>
         )}
@@ -125,7 +128,7 @@ function OfferedBooks({ userID }) {
           return {
             id: doc.id,
             userName: userData.name,
-            rating: userData.rating,
+            userRating: userData.rating,
             ...data,
           };
         })
@@ -152,7 +155,23 @@ function OfferedBooks({ userID }) {
         {offeredBooks.map((item) => (
           <Grid item key={item.id} xs={12} sm={6} md={4} lg={3}>
             {/* Card container */}
-            <Card style={{ height: "100%", textAlign: "left" }}>
+            <Card style={{ height: "100%", textAlign: "left", position: "relative" }}>
+              {/* Grey overlay for booked items */}
+              {item.booked && (
+                <Link component={RouterLink} to={"/details"} state={item}>
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      width: "100%",
+                      height: "100%",
+                      backgroundColor: "rgba(0, 0, 0, 0.5)", 
+                      zIndex: 1,
+                    }}
+                  ></div>
+                </Link>
+              )}
               <Link component={RouterLink} to={"/details"} state={item}>
                 <CardMedia
                   component="img"
@@ -199,7 +218,7 @@ function OfferedBooks({ userID }) {
                 >
                   <span style={{ fontStyle: "italic" }}>{item.userName}</span>
                   <div style={{ display: "flex", alignItems: "center" }}>
-                    {item.rating}
+                    {item.userRating}
                     <StarIcon sx={{ color: "#FDCC0D" }} />
                   </div>
                 </Typography>
