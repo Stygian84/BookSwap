@@ -2,7 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 import { getAuth, signInAnonymously,createUserWithEmailAndPassword } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore,collection,addDoc } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 const firebaseConfig = {
     apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -21,7 +21,7 @@ const firestore = getFirestore(firebaseApp);
 const storage = getStorage(firebaseApp);
 
 const auth = getAuth(firebaseApp);
-console.log(firebaseApp)
+
 // Function to sign in anonymously and get the token and UID
 let tokenRetrieved = false;
 

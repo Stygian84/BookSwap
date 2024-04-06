@@ -14,13 +14,19 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  MenuItem,
+  Select,
+  Chip,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import LogoImage from "../images/logo.png";
 import "../css/home.css";
 import { storage, firestore } from "../firebase";
-import { ref, uploadBytes,getDownloadURL } from "firebase/storage";
-import { doc, updateDoc } from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { doc, updateDoc, addDoc, collection, getDocs, query, where, orderBy, startAt,getDoc } from "firebase/firestore";
+import bookCategories from "../utils/categories";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../firebase";
 
 function HomeTop() {
   return (
@@ -46,6 +52,9 @@ function HomeTop() {
 
 function HomeContent() {
   const [open, setOpen] = useState(false);
+  const [data, setData] = useState([]);
+
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleClose = () => {
     setOpen(false);
@@ -53,35 +62,140 @@ function HomeContent() {
   const handleOpen = () => {
     setOpen(true);
   };
+
+  // To Convert UID to username
+  async function getUserData(uid) {
+    const userDocRef = doc(collection(firestore, "users"), uid);
+    const userDocSnapshot = await getDoc(userDocRef);
+    return userDocSnapshot.exists() ? userDocSnapshot.data() : null;
+  }
+  // Initial Query Display
+  const getAllImageURLs = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(firestore, "images"));
+      const imageData = await Promise.all(
+        querySnapshot.docs.map(async (doc) => {
+          const userData = await getUserData(doc.data().uid);
+          return {
+            id: doc.id,
+            userName: userData.name,
+            ...doc.data(),
+          };
+        })
+      );
+      setData(imageData);
+      return;
+    } catch (error) {
+      console.error("Error getting image URLs:", error);
+      return;
+    }
+  };
+  useEffect(() => {
+    getAllImageURLs();
+  }, []);
+  console.log(data);
+
+  // Search Function
+  const handleSearch = async (e) => {
+    if (e.key === "Enter" && searchTerm.trim() == ""){
+        getAllImageURLs();
+    }
+    if (e.key === "Enter" && searchTerm.trim() !== "") {
+      try {
+        let searchResults = [];
+
+        // [TODO] Logic title contains
+        // const q = query(
+        //   collection(firestore, "images"),
+        //   where("title", "array-contains", searchTerm.trim().toLowerCase()),
+        //   orderBy("title")
+        // );
+        // const querySnapshot = await getDocs(q);
+        // querySnapshot.forEach((doc) => {
+        //   searchResults.push({ id: doc.id, ...doc.data() });
+        // });
+        // setData(searchResults);
+
+        // Logic to search only from start letter n subsequent
+        const q = query(
+          collection(firestore, "images"),
+          where("title", ">=", searchTerm.trim()),
+          orderBy("title"),
+          startAt(searchTerm.trim()),
+        );
+        const querySnapshot = await getDocs(q);
+        searchResults = await Promise.all(
+          querySnapshot.docs.map(async (doc) => {
+            const userData = await getUserData(doc.data().uid);
+            const data = doc.data();
+            if (data.title.startsWith(searchTerm.trim())) {
+              return {
+                id: doc.id,
+                userName: userData.name,
+                ...data,
+              };
+            }
+            return null;
+          })
+        );
+        setData(searchResults.filter((result) => result !== null));
+      } catch (error) {
+        console.error("Error searching images:", error);
+      }
+    }
+  };
+  useEffect(() => {}, [data]);
   return (
     <div className="home-content">
       {/* Search bar */}
-      <TextField label="Search" variant="outlined" fullWidth style={{ marginBottom: "20px" }} />
+      <TextField
+        label="Search"
+        variant="outlined"
+        fullWidth
+        style={{ marginBottom: "20px" }}
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        onKeyDown={handleSearch}
+      />
 
       {/* Grid container */}
       <Grid container spacing={2}>
-        {/* Grid item */}
-        <Grid item xs={12} sm={6} md={4} lg={3}>
-          {/* Card container */}
-          <Card>
-            <CardMedia
-              component="img"
-              height="200"
-              image="https://via.placeholder.com/200" // Replace with your image URL
-              alt="Placeholder"
-            />
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
-                Title
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Description
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-
-        {/* Repeat grid items as needed */}
+        {/* Map data to grid items */}
+        {data.map((item) => (
+          <Grid item key={item.id} xs={12} sm={6} md={4} lg={3}>
+            {/* Card container */}
+            <Card>
+              <CardMedia
+                component="img"
+                height="300"
+                image={item.imageURL} // Use item's imageURL property as the image URL
+                alt={item.title} // Use item's title as the alt text for the image
+              />
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="div">
+                  {item.title}
+                </Typography>
+                <Chip
+                  label={item.category}
+                  color="primary"
+                  sx={{
+                    "&:hover": {
+                      bgcolor: "secondary.main",
+                      color: "primary.contrastText",
+                    },
+                    cursor: "pointer",
+                  }}
+                />
+                <Typography variant="body2" color="text.secondary">
+                  {item.userName}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {item.description}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        ))}
       </Grid>
 
       {/* Upload button */}
@@ -106,11 +220,25 @@ function HomeContent() {
 }
 
 function UploadDialog({ open, handleClose }) {
+  const [uid, setUid] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [note, setNote] = useState("");
+  const [category, setCategory] = useState("");
+  const [categoryError, setCategoryError] = useState("");
 
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUid(user.uid);
+      } else {
+        setUid(null);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
   const handleFileChange = (files) => {
     if (files && files[0]) {
       setSelectedFile(files[0]);
@@ -123,39 +251,55 @@ function UploadDialog({ open, handleClose }) {
       return;
     }
 
+    if (!title.trim() || !description.trim()) {
+      console.log("Title and description are required");
+      return;
+    }
+    if (!category) {
+      setCategoryError("Please select a category");
+      return;
+    }
     try {
       // Upload image file to Firebase Storage
       console.log(storage);
       const storageRef = ref(storage, selectedFile.name);
       const metadata = {
-        contentType: 'image/jpeg',
-        title,
-        description,
-        note,
-        createdAt: new Date(),
+        contentType: "image/jpeg",
+        customMetadata: {
+          title: title,
+          description: description,
+          note: note,
+          category: category,
+          uid: uid,
+          createdAt: new Date().toString(),
+        },
       };
-      
-      // Upload the file and metadata
+
       const uploadTask = uploadBytes(storageRef, selectedFile, metadata);
       await uploadTask;
-      // Get download URL of the uploaded image
       const downloadURL = await getDownloadURL(ref(storage, selectedFile.name));
 
-      // Store metadata in Firestore
-      //https://firebase.google.com/docs/firestore/manage-data/add-data#update-data
-    //   await firestore.collection("uploads").add({
-    //     title,
-    //     description,
-    //     note,
-    //     imageURL: downloadURL,
-    //     createdAt: new Date(),
-    //   });
+      // Upload image data to Firestore
+      const myCollection = collection(firestore, "images");
+      const myDocumentData = {
+        title: title,
+        description: description,
+        note: note,
+        category: category,
+        uid: uid,
+        imageURL: downloadURL,
+        createdAt: new Date().toString(),
+      };
+      // Add the document to the collection
+      const newDocRef = await addDoc(myCollection, myDocumentData);
+      console.log("New document added with ID:", newDocRef.id);
 
       // Reset form fields and close dialog
       setSelectedFile(null);
       setTitle("");
       setDescription("");
       setNote("");
+      setCategory("");
       handleClose();
     } catch (error) {
       console.error("Error uploading file:", error);
@@ -180,20 +324,34 @@ function UploadDialog({ open, handleClose }) {
           </Typography>
         </label>
 
-        {/* Display selected file name */}
         {selectedFile && (
           <Typography variant="body2" color="text.secondary">
             Selected file: {selectedFile.name}
           </Typography>
         )}
+        {!selectedFile && (
+          <Typography variant="body2" color="red">
+            Please Select A File
+          </Typography>
+        )}
 
-        <TextField label="Title" fullWidth margin="normal" value={title} onChange={(e) => setTitle(e.target.value)} />
+        <TextField
+          label="Title"
+          fullWidth
+          margin="normal"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          error={!title.trim()}
+          helperText={!title.trim() && "Title is required"}
+        />
         <TextField
           label="Description"
           fullWidth
           margin="normal"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
+          error={!description.trim()}
+          helperText={!description.trim() && "Description is required"}
         />
         <TextField
           label="Note (Optional)"
@@ -202,6 +360,32 @@ function UploadDialog({ open, handleClose }) {
           value={note}
           onChange={(e) => setNote(e.target.value)}
         />
+
+        <Select
+          label="Category"
+          fullWidth
+          displayEmpty
+          margin="normal"
+          placeholder="Select Category"
+          value={category}
+          onChange={(e) => {
+            setCategory(e.target.value);
+            setCategoryError("");
+          }}
+          error={Boolean(categoryError)}
+        >
+          <MenuItem value="">Select Category</MenuItem>
+          {bookCategories.map((category) => (
+            <MenuItem key={category} value={category}>
+              {category}
+            </MenuItem>
+          ))}
+        </Select>
+        {categoryError && (
+          <Typography variant="body2" color="red">
+            {categoryError}
+          </Typography>
+        )}
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose} color="primary">
