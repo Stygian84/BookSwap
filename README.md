@@ -132,7 +132,7 @@ Live Demo of the live chat feature can be found in this [link](https://youtu.be/
 - Add feature for users to indicate book condition (new, read once, well-loved, lightly annotated, heavily annotated)
 
 
-## Important Note
+# Important Note
 **Please Note:** The functionality may not be fully supported on iOS devices and the Safari browser. 
 The web application is also designed to be compatible with laptop devices.
 
