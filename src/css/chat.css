@@ -1,0 +1,91 @@
+/* Chat float button */
+.chat-float {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 9999999;
+  }
+  
+  /* Chat window */
+  .chat-window {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 300px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    border: 1px solid #cccccc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 9999999;
+  }
+  
+  /* Chat header */
+  .chat-header {
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 9999999;
+  }
+  
+  /* Chat body */
+  .chat-body {
+    padding: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 9999999;
+  }
+  
+  /* Chat footer */
+  .chat-footer {
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #cccccc;
+    z-index: 9999999;
+  }
+  
+  /* Chat close button */
+  .chat-close {
+    cursor: pointer;
+    z-index: 9999999;
+  }
+  
+  /* Input and button styling */
+  input[type="text"],
+  button {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #cccccc;
+  }
+  
+  button {
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
+  input[type="text"] {
+    flex: 1;
+    margin-right: 10px;
+  }
+  
