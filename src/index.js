@@ -2,11 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import {LoginContent} from './pages/Login.js'
+import LoginContent from './pages/Login.js'
 import { Divider } from "@mui/material";
-import { HomeTop } from './pages/Home.js';
+import { HomeContent, HomeTop } from './pages/Home.js';
 import RegisterContent from './pages/Register.js';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -33,6 +31,7 @@ function Content() {
     <Routes>
       <Route path="/" exact element={<LoginContent />} />
       <Route path="/register" exact element={<RegisterContent />} />
+      <Route path="/home" exact element={<HomeContent />} />
     </Routes>
   );
 }
