@@ -23,6 +23,7 @@ import { auth } from "../firebase";
 //Floating button on bottom right
 function UploadDialog({ open, handleClose }) {
   const [uid, setUid] = useState(null);
+  const [location,setLocation]=useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -37,6 +38,7 @@ function UploadDialog({ open, handleClose }) {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUid(user.uid);
+        setLocation(user.location);
       } else {
         setUid(null);
       }
@@ -78,6 +80,7 @@ function UploadDialog({ open, handleClose }) {
             note: note,
             category: category,
             uid: uid,
+            location:location,
             createdAt: new Date().toString(),
           },
         };
@@ -100,6 +103,7 @@ function UploadDialog({ open, handleClose }) {
         imageURL: downloadURL,
         createdAt: new Date().toString(),
         booked: false,
+        location: location,
       };
       // Add the document to the collection
       const newDocRef = await addDoc(myCollection, myDocumentData);

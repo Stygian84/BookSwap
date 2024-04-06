@@ -14,55 +14,27 @@ import {
   Box,
 } from "@mui/material";
 import React, { useState, useEffect } from "react";
-import LogoImage from "../images/logo.png";
 import "../css/home.css";
-import {  firestore } from "../firebase";
-import {
-  doc,
-  collection,
-  getDocs,
-  query,
-  where,
-  orderBy,
-  startAt,
-  getDoc,
-} from "firebase/firestore";
+import { firestore } from "../firebase";
+import { doc, collection, getDocs, query, where, orderBy, startAt, getDoc } from "firebase/firestore";
 import { Link as RouterLink } from "react-router-dom";
 import StarIcon from "@mui/icons-material/Star";
 import UploadDialog from "../components/uploadDialog";
+import bookCategories from "../utils/categories";
 
-function HomeTop() {
-  return (
-    <AppBar position="static">
-      <Toolbar>
-        <Avatar src={LogoImage} alt="Logo" sx={{ marginRight: "10px" }} />
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          BookSwap
-        </Typography>
-        <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Link href="/home" color="inherit" underline="none" sx={{ marginRight: "10px" }}>
-            Browse
-          </Link>
-          <Link href="/category" color="inherit" underline="none" sx={{ marginRight: "10px" }}>
-            Categories
-          </Link>
-          <Link href="/profile" color="inherit" underline="none">
-            My Profile
-          </Link>
-        </Box>
-      </Toolbar>
-    </AppBar>
-  );
-}
+const locations = ["East", "West", "Central", "North"];
 
-function HomeContent() {
+function CategoryContent() {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedLocation, setSelectedLocation] = useState("");
 
   const handleClose = () => {
     setOpen(false);
   };
+
   const handleOpen = () => {
     setOpen(true);
   };
@@ -77,7 +49,31 @@ function HomeContent() {
   // Initial Query Display and Update after Upload
   const getAllImageURLs = async () => {
     try {
-      const querySnapshot = await getDocs(collection(firestore, "images"));
+      let querySnapshot;
+      if (selectedCategory && selectedLocation) {
+        // Filter by both category and location
+        querySnapshot = await getDocs(
+          query(
+            collection(firestore, "images"),
+            where("category", "==", selectedCategory),
+            where("location", "==", selectedLocation)
+          )
+        );
+      } else if (selectedCategory) {
+        // Filter only by category
+        querySnapshot = await getDocs(
+          query(collection(firestore, "images"), where("category", "==", selectedCategory))
+        );
+      } else if (selectedLocation) {
+        // Filter only by location
+        querySnapshot = await getDocs(
+          query(collection(firestore, "images"), where("location", "==", selectedLocation))
+        );
+      } else {
+        // No filters applied
+        querySnapshot = await getDocs(collection(firestore, "images"));
+      }
+
       const imageData = await Promise.all(
         querySnapshot.docs.map(async (doc) => {
           const userData = await getUserData(doc.data().uid);
@@ -89,93 +85,80 @@ function HomeContent() {
           };
         })
       );
+
       setData(imageData);
-      return;
     } catch (error) {
       console.error("Error getting image URLs:", error);
-      return;
     }
   };
+
   useEffect(() => {
     getAllImageURLs();
-  }, [open]);
-  console.log(data);
+  }, [open, selectedCategory, selectedLocation]);
 
-  // Search Function
-  const handleSearch = async (e) => {
-    if (e.key === "Enter" && searchTerm.trim() == "") {
-      getAllImageURLs();
+  // Filter Function
+  const handleFilter = () => {
+    let filteredData = [...data];
+
+    if (selectedCategory) {
+      filteredData = filteredData.filter((item) => item.category === selectedCategory);
     }
-    if (e.key === "Enter" && searchTerm.trim() !== "") {
-      try {
-        let searchResults = [];
 
-        // [TODO] Logic title contains
-        // const q = query(
-        //   collection(firestore, "images"),
-        //   where("title", "array-contains", searchTerm.trim().toLowerCase()),
-        //   orderBy("title")
-        // );
-        // const querySnapshot = await getDocs(q);
-        // querySnapshot.forEach((doc) => {
-        //   searchResults.push({ id: doc.id, ...doc.data() });
-        // });
-        // setData(searchResults);
-
-        // Logic to search only from start letter n subsequent
-        const q = query(
-          collection(firestore, "images"),
-          where("title", ">=", searchTerm.trim()),
-          orderBy("title"),
-          startAt(searchTerm.trim())
-        );
-        const querySnapshot = await getDocs(q);
-        searchResults = await Promise.all(
-          querySnapshot.docs.map(async (doc) => {
-            const userData = await getUserData(doc.data().uid);
-            const data = doc.data();
-            if (data.title.toLowerCase().startsWith(searchTerm.trim().toLowerCase())) {
-              return {
-                id: doc.id,
-                userName: userData.name,
-                ...data,
-              };
-            }
-            return null;
-          })
-        );
-        setData(searchResults.filter((result) => result !== null));
-      } catch (error) {
-        console.error("Error searching images:", error);
-      }
+    if (selectedLocation) {
+      filteredData = filteredData.filter((item) => item.location === selectedLocation);
     }
+
+    setData(filteredData);
   };
-  useEffect(() => {}, [data]);
+
   return (
     <div className="home-content">
-      {/* Search bar */}
-      <TextField
-        label="Search"
-        variant="outlined"
-        fullWidth
-        style={{ marginBottom: "20px" }}
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        onKeyDown={handleSearch}
-      />
+      {/* Filter by Category */}
+      <Box sx={{ marginBottom: "20px" }}>
+        <Typography variant="subtitle1" sx={{ display: "inline" }}>
+          Filter By Category:
+        </Typography>
+        {bookCategories.map((category) => (
+          <Chip
+            key={category}
+            label={category}
+            color={selectedCategory === category ? "primary" : "default"}
+            onClick={() => setSelectedCategory(selectedCategory === category ? "" : category)}
+            sx={{ marginRight: "5px", cursor: "pointer" }}
+          />
+        ))}
+      </Box>
+
+      {/* Filter by Location */}
+      <Box sx={{ marginBottom: "20px" }}>
+        <Typography variant="subtitle1" sx={{ display: "inline" }}>
+          Filter By Location:
+        </Typography>
+        {locations.map((location) => (
+          <Chip
+            key={location}
+            label={location}
+            color={selectedLocation === location.toLowerCase() ? "primary" : "default"}
+            onClick={() =>
+              setSelectedLocation(selectedLocation === location.toLowerCase() ? "" : location.toLowerCase())
+            }
+            sx={{ marginRight: "5px", cursor: "pointer" }}
+          />
+        ))}
+      </Box>
 
       {/* Container for Book Items */}
       <Grid container spacing={2}>
         {data.map((item) => (
           <Grid item key={item.id} xs={12} sm={6} md={4} lg={3}>
             <Card style={{ height: "100%" }}>
-              <Link component={RouterLink} to={"/details"} state={item} >
+              <Link component={RouterLink} to={"/details"} state={item}>
                 <CardMedia
                   component="img"
                   height="300"
                   image={item.imageURL}
                   alt={item.title}
-                  style={{ cursor: "pointer" }} 
+                  style={{ cursor: "pointer" }}
                 />
               </Link>
               <CardContent style={{ height: "100%" }}>
@@ -256,5 +239,4 @@ function HomeContent() {
   );
 }
 
-
-export { HomeTop, HomeContent };
+export { CategoryContent };
