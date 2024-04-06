@@ -27,10 +27,18 @@ function HomeTop() {
   return (
     <AppBar position="static">
       <Toolbar>
-        <Avatar src={LogoImage} alt="Logo" sx={{ marginRight: "10px" }} />
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          BookSwap
-        </Typography>
+        <Link
+          href="/home"
+          color="inherit"
+          underline="none"
+          sx={{ display: "flex", alignItems: "center", marginRight: "10px" }}
+        >
+          <Avatar src={LogoImage} alt="Logo" sx={{ marginRight: "10px" }} />
+          <Typography variant="h6" component="div">
+            BookSwap
+          </Typography>
+        </Link>
+        <Box sx={{ flexGrow: 1 }} />
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Link href="/home" color="inherit" underline="none" sx={{ marginRight: "10px" }}>
             Browse
