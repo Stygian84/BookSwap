@@ -32,6 +32,7 @@ function UploadDialog({ open, handleClose }) {
   const [categoryError, setCategoryError] = useState("");
   const [isbn, setIsbn] = useState("");
   const [thumbnailUrl, setThumbnailUrl] = useState("");
+  const [bookNotFound, setBookNotFound] = useState(false);
 
   // Check current UID
   useEffect(() => {
@@ -107,7 +108,7 @@ function UploadDialog({ open, handleClose }) {
         location: userData.location,
         count: 0,
         rating: 0,
-        isbn:isbn
+        isbn: isbn,
       };
       // Add the document to the collection
       const newDocRef = await addDoc(myCollection, myDocumentData);
@@ -138,8 +139,9 @@ function UploadDialog({ open, handleClose }) {
         setDescription(bookInfo.subtitle || "");
         setCategory(bookInfo.subjects ? bookInfo.subjects[0] : "");
         setThumbnailUrl(data[`ISBN:${isbn}`].thumbnail_url || "");
+        setBookNotFound(false); // Reset book not found status if book is found
       } else {
-        console.error("Book not found");
+        setBookNotFound(true); // Set book not found status if book is not found
       }
     } catch (error) {
       console.error("Error fetching book data:", error);
@@ -185,6 +187,11 @@ function UploadDialog({ open, handleClose }) {
         )}
 
         <TextField label="ISBN" fullWidth margin="normal" value={isbn} onChange={(e) => setIsbn(e.target.value)} />
+        {bookNotFound && (
+          <Typography variant="body2" color="error">
+            Book not found.
+          </Typography>
+        )}
         <Button variant="outlined" color="primary" onClick={handleIsbnSearch} disabled={!isbn.trim()}>
           Search
         </Button>
