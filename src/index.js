@@ -9,6 +9,7 @@ import RegisterContent from "./pages/register.js";
 import { ProfileContent } from "./pages/profile.js";
 import { CategoryContent } from "./pages/category.js";
 import DetailsContent from "./pages/details.js";
+import Chat from "./utils/chat.js";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -42,6 +43,7 @@ function Content() {
       <Route path="/profile" exact element={<ProfileContent />} />
       <Route path="/details" exact element={<DetailsContent />} />
       <Route path="/category" exact element={<CategoryContent />} />
+      <Route path="/chat" exact element={<Chat />} />
     </Routes>
   );
 }

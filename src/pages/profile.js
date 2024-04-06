@@ -7,6 +7,7 @@ import { auth, firestore } from "../firebase";
 import StarOutlineIcon from "@mui/icons-material/StarOutline";
 import getUserData from "../utils/getUserData";
 import "../css/profile.css";
+import Chat from "../utils/chat";
 
 function ProfileContent() {
   const location = useLocation();
@@ -15,33 +16,42 @@ function ProfileContent() {
   const [showOfferedBooks, setShowOfferedBooks] = useState(true);
   const [showBorrowedBooks, setShowBorrowedBooks] = useState(false);
   const [userID, setUserID] = useState();
+  const [myUserID, setMyUserID] = useState();
+  const [viewedUserID, setViewedUserID] = useState();
 
-  // If not me, view other user profile
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        setUserID(user.uid);
+        const fetchUserData = async () => {
+          const fetchedUserData = await getUserData(user.uid);
+          setUserData(fetchedUserData);
+        };
+        fetchUserData();
+        setMyUserID(user.uid);
+      } else {
+        console.log("User not logged in.");
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  // if not me, view someone else
   useEffect(() => {
     if (viewedUser) {
+      setUserID(viewedUser.uid);
+      setViewedUserID(viewedUser.uid);
       const fetchUserData = async () => {
-        setUserID(viewedUser.uid);
         const fetchedUserData = await getUserData(viewedUser.uid);
         setUserData(fetchedUserData);
       };
       fetchUserData();
-    } else {
-      const unsubscribe = auth.onAuthStateChanged(async (user) => {
-        if (user) {
-          setUserID(user.uid);
-          const userData = await getUserData(user.uid);
-          setUserData(userData);
-        } else {
-          console.log("User not logged in.");
-        }
-      });
-
-      return () => unsubscribe();
     }
   }, [viewedUser]);
-
   return (
     <Box margin="2.5% 0" display="flex" justifyContent="center">
+      <Chat userId={myUserID} secondUserId={viewedUserID} />
       <Box width="90vw">
         {/* Profile content */}
         <Typography variant="h4" align="center" gutterBottom>
