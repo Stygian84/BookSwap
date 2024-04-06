@@ -13,15 +13,15 @@ import {
   Chip,
   Box,
 } from "@mui/material";
+import StarIcon from "@mui/icons-material/Star";
 import React, { useState, useEffect } from "react";
-import LogoImage from "../images/logo.png";
-import "../css/home.css";
+import { Link as RouterLink } from "react-router-dom";
 import { firestore } from "../firebase";
 import { collection, getDocs, query, where, orderBy, startAt } from "firebase/firestore";
-import { Link as RouterLink } from "react-router-dom";
-import StarIcon from "@mui/icons-material/Star";
 import UploadDialog from "../components/uploadDialog";
 import getUserData from "../utils/getUserData";
+import LogoImage from "../images/logo.png";
+import "../css/home.css";
 
 function HomeTop() {
   return (

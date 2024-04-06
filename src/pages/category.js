@@ -1,15 +1,13 @@
-import { Typography, Button, Link, Grid, Card, CardContent, CardMedia, Chip, Box } from "@mui/material";
 import React, { useState, useEffect } from "react";
-import "../css/home.css";
-import { firestore } from "../firebase";
-import { doc, collection, getDocs, query, where, getDoc } from "firebase/firestore";
 import { useLocation, Link as RouterLink } from "react-router-dom";
+import { Typography, Button, Link, Grid, Card, CardContent, CardMedia, Chip, Box } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
+import { doc, collection, getDocs, query, where, getDoc } from "firebase/firestore";
+import { firestore } from "../firebase";
 import UploadDialog from "../components/uploadDialog";
 import bookCategories from "../utils/categories";
+import locations from "../utils/locations";
 import "../css/category.css";
-
-const locations = ["East", "West", "Central", "North"];
 
 function CategoryContent() {
   const location = useLocation();

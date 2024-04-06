@@ -1,10 +1,9 @@
 import { useState } from "react";
-import { Container, Typography, TextField, Button, Select, MenuItem } from "@mui/material";
+import { Navigate } from "react-router-dom";
+import { Container, Typography, TextField, Button, Select, MenuItem, Link } from "@mui/material";
 import { auth, firestore } from "../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { Navigate } from "react-router-dom";
 import { collection, doc, setDoc } from "firebase/firestore";
-import { Link } from "@mui/material";
 
 function RegisterContent() {
   const [redirectToLogin, setRedirectToLogin] = useState(false);

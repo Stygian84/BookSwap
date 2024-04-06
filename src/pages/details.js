@@ -1,12 +1,11 @@
-import { useLocation, Link as RouterLink } from "react-router-dom";
-import { Typography, Button } from "@mui/material";
-import { firestore, auth } from "../firebase";
-import { Link } from "@mui/material";
-import { doc, updateDoc, getDoc } from "firebase/firestore";
-import "../css/details.css";
 import { useEffect, useState } from "react";
+import { useLocation, Link as RouterLink } from "react-router-dom";
+import { Typography, Button, Link } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
+import { firestore, auth } from "../firebase";
+import { doc, updateDoc, getDoc } from "firebase/firestore";
 import getUserData from "../utils/getUserData";
+import "../css/details.css";
 
 function DetailsContent() {
   const location = useLocation();

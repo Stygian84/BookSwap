@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import { auth, firestore } from "../firebase";
+import { useLocation,Link as RouterLink  } from "react-router-dom";
 import { Box, Typography, Button, Link, Card, Chip, CardMedia, CardContent, Grid } from "@mui/material";
-import { Link as RouterLink } from "react-router-dom";
 import StarIcon from "@mui/icons-material/Star";
-import StarOutlineIcon from "@mui/icons-material/StarOutline";
 import { collection, getDocs, query, where } from "firebase/firestore";
+import { auth, firestore } from "../firebase";
+import StarOutlineIcon from "@mui/icons-material/StarOutline";
 import getUserData from "../utils/getUserData";
 import "../css/profile.css";
 
