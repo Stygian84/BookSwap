@@ -40,6 +40,7 @@ import bookCategories from "../utils/categories";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase";
 import { Link as RouterLink } from "react-router-dom";
+import StarIcon from "@mui/icons-material/Star";
 
 function HomeTop() {
   return (
@@ -78,7 +79,7 @@ function HomeContent() {
     setOpen(true);
   };
 
-  // To Convert UID to username
+  // To get userData based on uid of the books
   async function getUserData(uid) {
     const userDocRef = doc(collection(firestore, "users"), uid);
     const userDocSnapshot = await getDoc(userDocRef);
@@ -94,6 +95,7 @@ function HomeContent() {
           return {
             id: doc.id,
             userName: userData.name,
+            rating: userData.rating,
             ...doc.data(),
           };
         })
@@ -107,7 +109,7 @@ function HomeContent() {
   };
   useEffect(() => {
     getAllImageURLs();
-  }, []);
+  }, [open]);
   console.log(data);
 
   // Search Function
@@ -179,7 +181,7 @@ function HomeContent() {
         {data.map((item) => (
           <Grid item key={item.id} xs={12} sm={6} md={4} lg={3}>
             {/* Card container */}
-            <Card>
+            <Card style={{ height: "100%" }}>
               <Link component={RouterLink} to={"/details"} state={item}>
                 <CardMedia
                   component="img"
@@ -189,15 +191,16 @@ function HomeContent() {
                   style={{ cursor: "pointer" }} // Add pointer cursor on hover
                 />
               </Link>
-              <CardContent>
+              <CardContent style={{ height: "100%" }}>
                 <Typography
                   gutterBottom
                   variant="h5"
                   component="div"
                   style={{
                     display: "-webkit-box",
-                    WebkitLineClamp: 1,
+                    WebkitLineClamp: 2,
                     WebkitBoxOrient: "vertical",
+                    height: "60px",
                     overflow: "hidden",
                     textOverflow: "ellipsis",
                   }}
@@ -215,10 +218,28 @@ function HomeContent() {
                     cursor: "pointer",
                   }}
                 />
-                <Typography variant="body2" color="text.secondary">
-                  {item.userName}
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
+                >
+                  <span style={{ fontStyle: "italic" }}>{item.userName}</span>
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    {item.rating}
+                    <StarIcon sx={{ color: "#FDCC0D" }} />
+                  </div>
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  style={{ overflow: "hidden", textOverflow: "ellipsis" }}
+                >
                   {item.description}
                 </Typography>
               </CardContent>
@@ -325,7 +346,7 @@ function UploadDialog({ open, handleClose }) {
         uid: uid,
         imageURL: downloadURL,
         createdAt: new Date().toString(),
-        booked: false
+        booked: false,
       };
       // Add the document to the collection
       const newDocRef = await addDoc(myCollection, myDocumentData);
@@ -337,6 +358,8 @@ function UploadDialog({ open, handleClose }) {
       setDescription("");
       setNote("");
       setCategory("");
+      setThumbnailUrl("");
+      setIsbn("");
       handleClose();
     } catch (error) {
       console.error("Error uploading file:", error);

@@ -34,9 +34,9 @@ function StarRating({ rating }) {
   const stars = [];
   for (let i = 1; i <= 5; i++) {
     if (i <= roundedRating) {
-      stars.push(<StarIcon key={i} color="primary" />);
+      stars.push(<StarIcon key={i} sx={{ color: "#FDCC0D" }} />);
     } else {
-      stars.push(<StarOutlineIcon key={i} color="primary" />);
+      stars.push(<StarOutlineIcon key={i} sx={{ color: "#FDCC0D" }} />);
     }
   }
 
@@ -62,7 +62,7 @@ async function getUserData(uid) {
 }
 function ProfileContent() {
   const [userData, setUserData] = useState(null);
-  const [showOfferedBooks, setShowOfferedBooks] = useState(false);
+  const [showOfferedBooks, setShowOfferedBooks] = useState(true);
   const [showBorrowedBooks, setShowBorrowedBooks] = useState(false);
   const [userID, setUserID] = useState();
 
@@ -81,7 +81,7 @@ function ProfileContent() {
   }, []);
   console.log(userData);
   return (
-    <Box marginTop="5%" display="flex" justifyContent="center">
+    <Box margin="2.5% 0" display="flex" justifyContent="center">
       <Box maxWidth="90vw">
         {/* Profile content */}
         <Typography variant="h4" align="center" gutterBottom>
@@ -113,12 +113,22 @@ function ProfileContent() {
               <Button
                 variant="contained"
                 color="primary"
-                onClick={() => setShowOfferedBooks(!showOfferedBooks)}
+                onClick={() => {
+                  setShowOfferedBooks(!showOfferedBooks);
+                  setShowBorrowedBooks(!showBorrowedBooks);
+                }}
                 sx={{ marginRight: "10px" }}
               >
                 {showOfferedBooks ? "Hide Offered Books" : "Show Offered Books"}
               </Button>
-              <Button variant="contained" color="primary" onClick={() => setShowBorrowedBooks(!showBorrowedBooks)}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => {
+                  setShowOfferedBooks(!showOfferedBooks);
+                  setShowBorrowedBooks(!showBorrowedBooks);
+                }}
+              >
                 {showBorrowedBooks ? "Hide Borrowed Book History" : "Show Borrowed Book History"}
               </Button>
             </Box>
@@ -153,6 +163,7 @@ function OfferedBooks({ userID }) {
           return {
             id: doc.id,
             userName: userData.name,
+            rating: userData.rating,
             ...data,
           };
         })
@@ -179,22 +190,20 @@ function OfferedBooks({ userID }) {
         {offeredBooks.map((item) => (
           <Grid item key={item.id} xs={12} sm={6} md={4} lg={3}>
             {/* Card container */}
-            <Card>
+            <Card style={{ height: "100%", textAlign: "left" }}>
               <CardMedia
                 component="img"
                 height="300"
                 image={item.imageURL} // Use item's imageURL property as the image URL
                 alt={item.title} // Use item's title as the alt text for the image
               />
-              <CardContent>
+              <CardContent style={{ height: "100%" }}>
                 <Typography
                   gutterBottom
                   variant="h5"
                   component="div"
                   style={{
-                    display: "-webkit-box",
-                    WebkitLineClamp: 1,
-                    WebkitBoxOrient: "vertical",
+                    height: "60px", // Set a fixed height for the title
                     overflow: "hidden",
                     textOverflow: "ellipsis",
                   }}
@@ -212,10 +221,28 @@ function OfferedBooks({ userID }) {
                     cursor: "pointer",
                   }}
                 />
-                <Typography variant="body2" color="text.secondary">
-                  {item.userName}
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
+                >
+                  <span style={{ fontStyle: "italic" }}>{item.userName}</span>
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    {item.rating}
+                    <StarIcon sx={{ color: "#FDCC0D" }} />
+                  </div>
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  style={{ overflow: "hidden", textOverflow: "ellipsis" }}
+                >
                   {item.description}
                 </Typography>
               </CardContent>
