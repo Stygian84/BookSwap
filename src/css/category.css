@@ -1,0 +1,5 @@
+.booked-card {
+    background-color: rgba(0, 0, 0, 0.5); /* Grey overlay */
+    pointer-events: none; /* Disable pointer events to make the card unclickable */
+  }
+  

@@ -202,17 +202,19 @@ function HomeContent() {
                   >
                     {item.title}
                   </Typography>
-                  <Chip
-                    label={item.category}
-                    color="primary"
-                    sx={{
-                      "&:hover": {
-                        bgcolor: "secondary.main",
-                        color: "primary.contrastText",
-                      },
-                      cursor: "pointer",
-                    }}
-                  />
+                  <Link component={RouterLink} to={`/category`} state={item.category}>
+                    <Chip
+                      label={item.category}
+                      color="primary"
+                      sx={{
+                        "&:hover": {
+                          bgcolor: "secondary.main",
+                          color: "primary.contrastText",
+                        },
+                        cursor: "pointer",
+                      }}
+                    />
+                  </Link>
                   <Typography
                     variant="body2"
                     color="text.secondary"

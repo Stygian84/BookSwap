@@ -7,6 +7,7 @@ import StarIcon from "@mui/icons-material/Star";
 import StarOutlineIcon from "@mui/icons-material/StarOutline";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import getUserData from "../utils/getUserData";
+import "../css/profile.css";
 
 function ProfileContent() {
   const location = useLocation();
