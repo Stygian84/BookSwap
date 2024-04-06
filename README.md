@@ -61,6 +61,22 @@ The web app should open automatically on your default browser.
 If it doesn't open automatically, 
 open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
+### Live Chat
+To simulate live chat feature, open another terminal and run `npm start`. When this prompt below appears, press `Y`.
+```
+? Something is already running on port 3000.
+
+Would you like to run the app on another port instead? » (Y/n)
+```
+User A has to go to User B profile and then click the chat button.  
+Live Demo of the live chat feature can be found in this link. 
+### Dummy Login Credentials
+1. Email: `ghostkirito84@gmail.com` , Password: `admin1234`
+2. Email: `nicholasgandhi84@gmail.com` , Password: `admin1234`
+3. Email: `stygian456@gmail.com` , Password: `admin1234`  
+
+**Note :** You can also register your own email or any valid email to register as a user.  
+
 # Key Features
 - Individual account registration and sign-ins
     - Lenders and Borrowers will communicate via email during book exchange process
@@ -80,6 +96,9 @@ open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 - "Borrow Now" button
     - Lenders will receive an email notification that an user wants to borrow their listed book
     - Lenders can reach out to the Borrower if they are interested to conduct a book exchange
+- Live Chat feature
+    - To reach out to borrowers/lenders, users can communicate and find a common time frame and place to do the exchange
+
 # Design Consideration
 - User registration
     - Build a personalised experience in the book-exchange community
@@ -106,7 +125,7 @@ open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 - Initiate regular book clubs or discussion forums to nurture a community around the project, forming a group of dedicated users who can introduce it to new users
 - Improve search function (able to search by author, tolerate typos)
 - Improve filter function (users should be able to apply more than one filter at one time (now limited by Firebase))
-- Introduce Live Chat function to facilitate book exchange
+- Improve Live Chat function to facilitate book exchange so that users can chat with any known other users
 - Add feature for users to indicate book condition (new, read once, well-loved, lightly annotated, heavily annotated)
 
 
@@ -138,6 +157,11 @@ The `.env` file should be in the same level as `.gitignore` , `.package-lock.jso
 ## 3. Pixelated Images 
 If the user filled in using ISBN, the web app auto-retrieves available thumbnail using [OpenLibrary ISBN API](https://openlibrary.org/dev/docs/api/search). This thumbnail is low in resolution. The user can upload his/her own image to override this thumbnail.
 
+## 4. Greyed Images
+The images that are greyed means the book has been booked by a user and cannot be booked by any other user.
+
+## 5. How to log out?
+Log out button is not implemented yet, but you can go back to `http://localhost:3000` and re-login using another account.
 
 
 
