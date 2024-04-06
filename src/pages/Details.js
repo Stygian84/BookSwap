@@ -1,22 +1,14 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, Link as RouterLink } from "react-router-dom";
 import { Typography, Button } from "@mui/material";
-import { storage, firestore, auth } from "../firebase";
+import { firestore, auth } from "../firebase";
+import { Link } from "@mui/material";
 import {
   doc,
-  updateDoc,
-  addDoc,
-  collection,
-  getDocs,
-  query,
-  where,
-  orderBy,
-  startAt,
-  getDoc,
+  updateDoc
 } from "firebase/firestore";
 import "../css/details.css";
 import { useEffect, useState } from "react";
 import StarIcon from "@mui/icons-material/Star";
-import StarOutlineIcon from "@mui/icons-material/StarOutline";
 
 function DetailsContent() {
   const location = useLocation();
@@ -24,7 +16,7 @@ function DetailsContent() {
   const [booked, setBooked] = useState(item.booked);
   const [userID, setUserID] = useState();
   const [rated, setRated] = useState(false);
-
+  console.log(item);
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
@@ -84,7 +76,11 @@ function DetailsContent() {
           <Typography variant="h2">{item.title}</Typography>
           <div className="text-container">
             <Typography className="description-text">
-              <strong>Owner:</strong> {item.userName}
+              <strong>Owner: </strong>
+
+              <Link component={RouterLink} to={"/profile"} state={item} color="inherit">
+                {item.userName}
+              </Link>
             </Typography>
             <Typography className="description-text">
               <strong>Category:</strong> {item.category}
@@ -102,8 +98,7 @@ function DetailsContent() {
               {booked ? "Booked" : item.uid === userID ? "Owned" : "Book Now"}
             </Button>
             <Typography className="description-text" sx={{ marginTop: "10px" }}>
-              Current Book Rating: <strong>{item.rating}</strong> by {" "}
-              {item.count > 1 ? `${item.count} users` : "1 user"}
+              Current Book Rating: <strong>{item.rating}</strong> by {item.count > 1 ? `${item.count} users` : "1 user"}
             </Typography>
             <Typography className="description-text" sx={{ marginTop: "10px" }}>
               <strong>Rate this book</strong>
@@ -133,6 +128,7 @@ function DetailsContent() {
   );
 }
 
+// Hoverable Star Rating (to rate something)
 function StarRating({ initialRating, onChange, rated }) {
   const [rating, setRating] = useState(initialRating);
   const handleMouseEnter = (index) => {
@@ -168,4 +164,5 @@ function StarRating({ initialRating, onChange, rated }) {
     </div>
   );
 }
+
 export default DetailsContent;

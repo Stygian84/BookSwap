@@ -1,84 +1,46 @@
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { auth, firestore } from "../firebase";
-import {
-  Container,
-  Box,
-  Typography,
-  TextField,
-  Button,
-  Link,
-  Card,
-  Chip,
-  CardMedia,
-  CardContent,
-  Grid,
-} from "@mui/material";
+import { Box, Typography, Button, Link, Card, Chip, CardMedia, CardContent, Grid } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import StarIcon from "@mui/icons-material/Star";
 import StarOutlineIcon from "@mui/icons-material/StarOutline";
-import {
-  doc,
-  updateDoc,
-  addDoc,
-  collection,
-  getDocs,
-  query,
-  where,
-  orderBy,
-  startAt,
-  getDoc,
-} from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import getUserData from "../utils/getUserData";
 
-function StarRating({ rating }) {
-  const roundedRating = Math.round(rating);
-  const stars = [];
-  for (let i = 1; i <= 5; i++) {
-    if (i <= roundedRating) {
-      stars.push(<StarIcon key={i} sx={{ color: "#FDCC0D" }} />);
-    } else {
-      stars.push(<StarOutlineIcon key={i} sx={{ color: "#FDCC0D" }} />);
-    }
-  }
-
-  return (
-    <Box display="flex" justifyContent="center" alignItems="center">
-      {stars}
-    </Box>
-  );
-}
-async function getUserData(uid) {
-  const userDocRef = doc(collection(firestore, "users"), uid);
-  const userDocSnapshot = await getDoc(userDocRef);
-  if (userDocSnapshot.exists()) {
-    const userData = userDocSnapshot.data();
-    if (!userData.rating) {
-      // If rating field does not exist, update the document
-      await updateDoc(userDocRef, { rating: 0.0 });
-      userData.rating = 0.0;
-    }
-    return userData;
-  }
-  return null;
-}
 function ProfileContent() {
+  const location = useLocation();
+  const viewedUser = location.state;
   const [userData, setUserData] = useState(null);
   const [showOfferedBooks, setShowOfferedBooks] = useState(true);
   const [showBorrowedBooks, setShowBorrowedBooks] = useState(false);
   const [userID, setUserID] = useState();
 
+  // If not me, view other user profile
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async (user) => {
-      if (user) {
-        setUserID(user.uid);
-        const userData = await getUserData(user.uid);
-        setUserData(userData);
-      } else {
-        console.log("User not logged in.");
-      }
-    });
+    if (viewedUser) {
+      const fetchUserData = async () => {
+        setUserID(viewedUser.uid);
+        const fetchedUserData = await getUserData(viewedUser.uid);
+        setUserData(fetchedUserData);
+      };
 
-    return () => unsubscribe();
-  }, []);
+      fetchUserData();
+    } else {
+      const unsubscribe = auth.onAuthStateChanged(async (user) => {
+        if (user) {
+          setUserID(user.uid);
+          const userData = await getUserData(user.uid);
+          setUserData(userData);
+        } else {
+          console.log("User not logged in.");
+        }
+      });
+
+      return () => unsubscribe();
+    }
+  }, [viewedUser]);
+
   console.log(userData);
   return (
     <Box margin="2.5% 0" display="flex" justifyContent="center">
@@ -143,12 +105,6 @@ function ProfileContent() {
 }
 function OfferedBooks({ userID }) {
   const [offeredBooks, setOfferredBooks] = useState([]);
-  // Replace this with your logic to fetch and display the user's offered books
-  // const offeredBooks = [
-  //   { id: 1, title: "Book 1", author: "Author 1" },
-  //   { id: 2, title: "Book 2", author: "Author 2" },
-  //   { id: 3, title: "Book 3", author: "Author 3" },
-  // ];
   const getBooksData = async (uid) => {
     try {
       let booksData = [];
@@ -256,6 +212,8 @@ function OfferedBooks({ userID }) {
     </Box>
   );
 }
+
+// PlaceHolder
 function BorrowedBookHistory() {
   const offeredBooks = [
     { id: 1, title: "Book 1", author: "Author 1" },
@@ -276,6 +234,24 @@ function BorrowedBookHistory() {
           </Typography>
         </Box>
       ))}
+    </Box>
+  );
+}
+
+// Show Star Rating
+function StarRating({ rating }) {
+  const roundedRating = Math.round(rating);
+  const stars = [];
+  for (let i = 1; i <= 5; i++) {
+    if (i <= roundedRating) {
+      stars.push(<StarIcon key={i} sx={{ color: "#FDCC0D" }} />);
+    } else {
+      stars.push(<StarOutlineIcon key={i} sx={{ color: "#FDCC0D" }} />);
+    }
+  }
+  return (
+    <Box display="flex" justifyContent="center" alignItems="center">
+      {stars}
     </Box>
   );
 }

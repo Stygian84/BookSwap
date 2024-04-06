@@ -1,26 +1,26 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
+import React from "react";
+import ReactDOM from "react-dom/client";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
-import './index.css';
-import LoginContent from './pages/Login.js'
+import "./index.css";
+import LoginContent from "./pages/login.js";
 import { Divider } from "@mui/material";
-import { HomeContent, HomeTop } from './pages/Home.js';
-import RegisterContent from './pages/Register.js';
-import { ProfileContent } from './pages/Profile.js';
-import DetailsContent from './pages/Details.js';
+import { HomeContent, HomeTop } from "./pages/home.js";
+import RegisterContent from "./pages/register.js";
+import { ProfileContent } from "./pages/profile.js";
+import DetailsContent from "./pages/details.js";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
       <Top />
-        <Divider className="divider" variant="middle" />
+      <Divider className="divider" variant="middle" />
       <Content />
     </BrowserRouter>
   </React.StrictMode>
 );
 
-function Top(){
+function Top() {
   return (
     <Routes>
       <Route path="/home" exact element={<HomeTop />} />

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Container, Typography, TextField, Button } from '@mui/material';
 import { auth, firestore } from '../firebase'; 
-import { getAuth, signInAnonymously, createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { Navigate } from 'react-router-dom';
 import { collection, doc, setDoc } from "firebase/firestore";
 
