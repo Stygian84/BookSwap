@@ -8,6 +8,8 @@ const bookCategories = [
     "Fantasy",
     "Biography",
     "Self-help",
+    "TextBook",
+    "Children's Book"
     // Add more categories as needed
   ];
 export default bookCategories

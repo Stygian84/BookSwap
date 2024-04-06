@@ -3,7 +3,7 @@ import {
   AppBar,
   Toolbar,
   Button,
-  Link as RouterLink,
+  Link,
   Grid,
   Avatar,
   TextField,
@@ -17,13 +17,25 @@ import {
   MenuItem,
   Select,
   Chip,
+  Box,
 } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import LogoImage from "../images/logo.png";
 import "../css/home.css";
 import { storage, firestore } from "../firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { doc, updateDoc, addDoc, collection, getDocs, query, where, orderBy, startAt,getDoc } from "firebase/firestore";
+import {
+  doc,
+  updateDoc,
+  addDoc,
+  collection,
+  getDocs,
+  query,
+  where,
+  orderBy,
+  startAt,
+  getDoc,
+} from "firebase/firestore";
 import bookCategories from "../utils/categories";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase";
@@ -36,15 +48,17 @@ function HomeTop() {
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           BookSwap
         </Typography>
-        <Button color="inherit" component={RouterLink} to="/browse">
-          Browse
-        </Button>
-        <Button color="inherit" component={RouterLink} to="/categories">
-          Categories
-        </Button>
-        <Button color="inherit" component={RouterLink} to="/profile">
-          My Profile
-        </Button>
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Link href="/home" color="inherit" underline="none" sx={{ marginRight: "10px" }}>
+            Browse
+          </Link>
+          <Link href="/categories" color="inherit" underline="none" sx={{ marginRight: "10px" }}>
+            Categories
+          </Link>
+          <Link href="/profile" color="inherit" underline="none">
+            My Profile
+          </Link>
+        </Box>
       </Toolbar>
     </AppBar>
   );
@@ -97,8 +111,8 @@ function HomeContent() {
 
   // Search Function
   const handleSearch = async (e) => {
-    if (e.key === "Enter" && searchTerm.trim() == ""){
-        getAllImageURLs();
+    if (e.key === "Enter" && searchTerm.trim() == "") {
+      getAllImageURLs();
     }
     if (e.key === "Enter" && searchTerm.trim() !== "") {
       try {
@@ -121,14 +135,14 @@ function HomeContent() {
           collection(firestore, "images"),
           where("title", ">=", searchTerm.trim()),
           orderBy("title"),
-          startAt(searchTerm.trim()),
+          startAt(searchTerm.trim())
         );
         const querySnapshot = await getDocs(q);
         searchResults = await Promise.all(
           querySnapshot.docs.map(async (doc) => {
             const userData = await getUserData(doc.data().uid);
             const data = doc.data();
-            if (data.title.startsWith(searchTerm.trim())) {
+            if (data.title.toLowerCase().startsWith(searchTerm.trim().toLowerCase())) {
               return {
                 id: doc.id,
                 userName: userData.name,
@@ -172,7 +186,18 @@ function HomeContent() {
                 alt={item.title} // Use item's title as the alt text for the image
               />
               <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
+                <Typography
+                  gutterBottom
+                  variant="h5"
+                  component="div"
+                  style={{
+                    display: "-webkit-box",
+                    WebkitLineClamp: 1,
+                    WebkitBoxOrient: "vertical",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
+                >
                   {item.title}
                 </Typography>
                 <Chip
@@ -227,6 +252,8 @@ function UploadDialog({ open, handleClose }) {
   const [note, setNote] = useState("");
   const [category, setCategory] = useState("");
   const [categoryError, setCategoryError] = useState("");
+  const [isbn, setIsbn] = useState("");
+  const [thumbnailUrl, setThumbnailUrl] = useState("");
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -239,6 +266,7 @@ function UploadDialog({ open, handleClose }) {
 
     return () => unsubscribe();
   }, []);
+
   const handleFileChange = (files) => {
     if (files && files[0]) {
       setSelectedFile(files[0]);
@@ -246,7 +274,7 @@ function UploadDialog({ open, handleClose }) {
   };
 
   const handleFileUpload = async () => {
-    if (!selectedFile) {
+    if (!selectedFile && !thumbnailUrl) {
       console.log("No file selected");
       return;
     }
@@ -261,23 +289,27 @@ function UploadDialog({ open, handleClose }) {
     }
     try {
       // Upload image file to Firebase Storage
-      console.log(storage);
-      const storageRef = ref(storage, selectedFile.name);
-      const metadata = {
-        contentType: "image/jpeg",
-        customMetadata: {
-          title: title,
-          description: description,
-          note: note,
-          category: category,
-          uid: uid,
-          createdAt: new Date().toString(),
-        },
-      };
+      let downloadURL;
+      if (selectedFile) {
+        const storageRef = ref(storage, selectedFile.name);
+        const metadata = {
+          contentType: "image/jpeg",
+          customMetadata: {
+            title: title,
+            description: description,
+            note: note,
+            category: category,
+            uid: uid,
+            createdAt: new Date().toString(),
+          },
+        };
 
-      const uploadTask = uploadBytes(storageRef, selectedFile, metadata);
-      await uploadTask;
-      const downloadURL = await getDownloadURL(ref(storage, selectedFile.name));
+        const uploadTask = uploadBytes(storageRef, selectedFile, metadata);
+        await uploadTask;
+        downloadURL = await getDownloadURL(ref(storage, selectedFile.name));
+      } else {
+        downloadURL = thumbnailUrl;
+      }
 
       // Upload image data to Firestore
       const myCollection = collection(firestore, "images");
@@ -306,6 +338,24 @@ function UploadDialog({ open, handleClose }) {
     }
   };
 
+  const handleIsbnSearch = async () => {
+    try {
+      const response = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&jscmd=details&format=json`);
+      const data = await response.json();
+      console.log(data);
+      if (data[`ISBN:${isbn}`]) {
+        const bookInfo = data[`ISBN:${isbn}`].details;
+        setTitle(bookInfo.title || "");
+        setDescription(bookInfo.subtitle || "");
+        setCategory(bookInfo.subjects ? bookInfo.subjects[0] : "");
+        setThumbnailUrl(data[`ISBN:${isbn}`].thumbnail_url || "");
+      } else {
+        console.error("Book not found");
+      }
+    } catch (error) {
+      console.error("Error fetching book data:", error);
+    }
+  };
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>Upload Image</DialogTitle>
@@ -329,11 +379,27 @@ function UploadDialog({ open, handleClose }) {
             Selected file: {selectedFile.name}
           </Typography>
         )}
-        {!selectedFile && (
+        {!selectedFile && !thumbnailUrl && (
           <Typography variant="body2" color="red">
             Please Select A File
           </Typography>
         )}
+
+        {thumbnailUrl && (
+          <Card style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+            <CardMedia
+              component="img"
+              src={thumbnailUrl}
+              alt="Book Thumbnail"
+              style={{ width: "100%", maxWidth: "200px" }}
+            />
+          </Card>
+        )}
+
+        <TextField label="ISBN" fullWidth margin="normal" value={isbn} onChange={(e) => setIsbn(e.target.value)} />
+        <Button variant="outlined" color="primary" onClick={handleIsbnSearch} disabled={!isbn.trim()}>
+          Search
+        </Button>
 
         <TextField
           label="Title"
