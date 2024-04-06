@@ -1,3 +1,66 @@
+# Versions
+**Windows:** 10 Version 22H2 (OS Build 19045.4170)  
+**Node :** v20.11.0  
+**npm :** v10.2.3
+
+### Browsers Tested
+1. Opera GX : LVL5 (core: 107.0.5045.86)
+2. Chrome : Version 123.0.6312.106 (Official Build) (64-bit)
+3. Edge : Version 123.0.2420.81 (Official build) (64-bit)
+
+# Getting Started
+
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+## How To Run
+### Install Node.js and npm
+Node.js can be downloaded from [here](https://nodejs.org/en/download).  
+Installation guide can be found in this [blog](https://radixweb.com/blog/installing-npm-and-nodejs-on-windows-and-mac).
+### Check if Node.js and npm are installed properly
+Go to command prompt (press `Win Key + X` , then press `a`). 
+
+```
+node -v  
+npm -v
+```
+It should output the installed versions
+```
+v20.11.0
+10.2.3
+```
+### Git Clone and Install Necessary Modules
+Git clone this repo  
+Go to the root project directory and run `npm install`
+```shell
+git clone https://github.com/Stygian84/BookSwap.git
+cd BookSwap
+npm install
+```
+### Place `.env` file in root directory and Run `npm start`
+Place `.env` file in the root project directory (inside BookSwap folder).  
+Then, to start development process, run 
+```p
+npm start
+```
+This should be the expected output
+```
+Compiled successfully!
+
+You can now view BookSwap in the browser.        
+
+  Local:            http://localhost:3000        
+  On Your Network:  http://10.32.50.156:3000     
+
+Note that the development build is not optimized.
+To create a production build, use npm run build. 
+
+webpack compiled successfully
+```
+### Finish
+The web app should open automatically on your default browser.  
+If it doesn't open automatically, 
+open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+
 # Key Features
 - Individual account registration and sign-ins
     - Lenders and Borrowers will communicate via email during book exchange process
@@ -46,75 +109,13 @@
 - Introduce Live Chat function to facilitate book exchange
 - Add feature for users to indicate book condition (new, read once, well-loved, lightly annotated, heavily annotated)
 
-# Versions
-**Windows:** 10 Version 22H2 (OS Build 19045.4170)  
-**Node :** v20.11.0  
-**npm :** v10.2.3
-
-### Browsers Tested
-1. Opera GX : LVL5 (core: 107.0.5045.86)
-2. Chrome : Version 123.0.6312.106 (Official Build) (64-bit)
-3. Edge : Version 123.0.2420.81 (Official build) (64-bit)
-
-# Getting Started
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## How To Run
-### Install Node.js and npm
-Node.js can be downloaded from [here](https://nodejs.org/en/download).  
-Installation guide can be found in this [blog](https://radixweb.com/blog/installing-npm-and-nodejs-on-windows-and-mac).
-### Check if Node.js and npm are installed properly
-Go to command prompt (press `Win Key + X` , then press `a`). 
-
-```
-node -v  
-npm -v
-```
-It should output the installed versions
-```
-v20.11.0
-10.2.3
-```
-### Git Clone and Install Necessary Modules
-Git clone this repo  
-Go to the root project directory and run `npm install`
-```shell
-git clone https://github.com/Stygian84/BookSwap.git
-cd BookSwap
-npm install
-```
-### Place `.env` file and `npm start`
-Place `.env` file in the root project directory (inside BookSwap folder).  
-Then, to start development process, run 
-```p
-npm start
-```
-This should be the expected output
-```
-Compiled successfully!
-
-You can now view BookSwap in the browser.        
-
-  Local:            http://localhost:3000        
-  On Your Network:  http://10.32.50.156:3000     
-
-Note that the development build is not optimized.
-To create a production build, use npm run build. 
-
-webpack compiled successfully
-```
-### Finish
-The web app should open automatically on your default browser.  
-If it doesn't open automatically, 
-open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
 
 ## Important Note
 **Please Note:** The functionality may not be fully supported on iOS devices and the Safari browser. 
 The web application is also designed to be compatible with laptop devices.
 
 # FAQ
+## 1. Missing App Configuration Error
 If you encounter the error below, ensure `.env` is stored in the root project directory.
 ```
 Installations: Missing App configuration value: "projectId" (installations/missing-app-config-values).
@@ -130,5 +131,13 @@ REACT_APP_FIREBASE_MESSAGING_SENDER_ID
 REACT_APP_FIREBASE_APP_ID
 REACT_APP_FIREBASE_MEASUREMENT_ID
 ```
+
+## 2. `.env` Location
+The `.env` file should be in the same level as `.gitignore` , `.package-lock.json` and `README.md`
+
+## 3. Pixelated Images 
+If the user filled in using ISBN, the web app auto-retrieves available thumbnail using [OpenLibrary ISBN API](https://openlibrary.org/dev/docs/api/search). This thumbnail is low in resolution. The user can upload his/her own image to override this thumbnail.
+
+
 
 

@@ -84,7 +84,6 @@ function HomeContent() {
   useEffect(() => {
     getAllImageURLs();
   }, [open]);
-  console.log(data);
 
   // Search Function
   const handleSearch = async (e) => {

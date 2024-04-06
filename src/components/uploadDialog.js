@@ -131,7 +131,6 @@ function UploadDialog({ open, handleClose }) {
     try {
       const response = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&jscmd=details&format=json`);
       const data = await response.json();
-      console.log(data);
       if (data[`ISBN:${isbn}`]) {
         const bookInfo = data[`ISBN:${isbn}`].details;
         setTitle(bookInfo.title || "");
