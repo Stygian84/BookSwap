@@ -4,6 +4,7 @@ import { auth, firestore } from "../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { Navigate } from "react-router-dom";
 import { collection, doc, setDoc } from "firebase/firestore";
+import { Link } from "@mui/material";
 
 function RegisterContent() {
   const [redirectToLogin, setRedirectToLogin] = useState(false);
@@ -51,6 +52,9 @@ function RegisterContent() {
   }
   return (
     <Container maxWidth="sm" style={{ marginTop: "100px" }}>
+      <Link href="/" variant="body2">
+        Back to Login
+      </Link>
       <Typography variant="h4" gutterBottom>
         Register
       </Typography>

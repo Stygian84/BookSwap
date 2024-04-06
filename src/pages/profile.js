@@ -24,7 +24,6 @@ function ProfileContent() {
         const fetchedUserData = await getUserData(viewedUser.uid);
         setUserData(fetchedUserData);
       };
-
       fetchUserData();
     } else {
       const unsubscribe = auth.onAuthStateChanged(async (user) => {
@@ -41,15 +40,15 @@ function ProfileContent() {
     }
   }, [viewedUser]);
 
-  console.log(userData);
   return (
     <Box margin="2.5% 0" display="flex" justifyContent="center">
-      <Box maxWidth="90vw">
+      <Box width="90vw">
         {/* Profile content */}
         <Typography variant="h4" align="center" gutterBottom>
           My Profile
         </Typography>
-        {userData && (
+
+        {userData ? (
           <Box textAlign="center">
             <img
               src="https://via.placeholder.com/150"
@@ -97,6 +96,13 @@ function ProfileContent() {
             {showOfferedBooks && <OfferedBooks userID={userID} />}
 
             {showBorrowedBooks && <BorrowedBookHistory />}
+          </Box>
+        ) : (
+          // Prompt to login
+          <Box>
+            <Typography variant="h5" textAlign={"center"}>
+              You are not logged in, <Link component={RouterLink} to="/">click here to login</Link>.
+            </Typography>
           </Box>
         )}
       </Box>

@@ -14,7 +14,7 @@ function DetailsContent() {
   const [booked, setBooked] = useState(item.booked);
   const [userID, setUserID] = useState();
   const [rated, setRated] = useState(false);
-  console.log(item);
+  
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {

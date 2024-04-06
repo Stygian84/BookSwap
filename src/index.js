@@ -36,6 +36,7 @@ function Content() {
   return (
     <Routes>
       <Route path="/" exact element={<LoginContent />} />
+      <Route path="/login" exact element={<LoginContent />} />
       <Route path="/register" exact element={<RegisterContent />} />
       <Route path="/home" exact element={<HomeContent />} />
       <Route path="/profile" exact element={<ProfileContent />} />
