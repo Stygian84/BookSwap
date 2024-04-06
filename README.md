@@ -1,3 +1,6 @@
+# Overview
+BookSwap is a web application designed to facilitate the exchange or trading of books between users. This web app aims to create a community-driven platform for book lovers to exchange books, connect with like-minded individuals, and expand their reading horizons. The real-time chat feature enhances communication between users, while the book listing and search functionalities make it easy for users to find the books they're interested in exchanging.
+
 # Versions
 **Windows:** 10 Version 22H2 (OS Build 19045.4170)  
 **Node :** v20.11.0  
