@@ -1,13 +1,16 @@
 # Features
 1. Sign-In and Register Account using Firebase Authentication and FireStore
-2. [TODO] Users can upload Books that they want to trade
+2. [Done] Users can upload Books that they want to trade
 3. [TODO] When Users click on books that they want, disable it (out of stock)
-4. [TODO] Search Function
+4. [Done] Search Function
 5. [TODO] Chat System
 
 # Future Improvement
 1. Add More Categories in Categories
 2. Make Upload Button more user friendly similar to gdrive
+
+# Versions
+Node : v20.11.0
 
 # Getting Started with Create React App
 
