@@ -1,6 +1,9 @@
 # Overview
 BookSwap is a web application designed to facilitate the exchange or trading of books between users. This web app aims to create a community-driven platform for book lovers to exchange books, connect with like-minded individuals, and expand their reading horizons. The real-time chat feature enhances communication between users, while the book listing and search functionalities make it easy for users to find the books they're interested in exchanging.
 
+# Link
+The web app can be accessed [here](https://bookswap-123.netlify.app) without any set up.
+
 # Versions
 **Windows:** 10 Version 22H2 (OS Build 19045.4170)  
 **Node :** v20.11.0  
@@ -11,11 +14,11 @@ BookSwap is a web application designed to facilitate the exchange or trading of 
 2. Chrome : Version 123.0.6312.106 (Official Build) (64-bit)
 3. Edge : Version 123.0.2420.81 (Official build) (64-bit)
 
-# Getting Started
+# Getting Started for Development
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## How To Run
+## How To Run Development
 ### 1. Install Node.js and npm
 Node.js can be downloaded from [here](https://nodejs.org/en/download).  
 Installation guide can be found in this [blog](https://radixweb.com/blog/installing-npm-and-nodejs-on-windows-and-mac).
@@ -75,7 +78,7 @@ User A has to go to User B profile and then click the chat button.
 Live Demo of the live chat feature can be found in this [link](https://youtu.be/_mMSghv22YM). 
 ### Dummy Login Credentials
 1. Email: `ghostkirito84@gmail.com` , Password: `admin1234`
-2. Email: `nicholasgandhi84@gmail.com` , Password: `admin1234`
+2. Email: `nicholasgandhi84@gmail.com` , Password: `admin123`
 3. Email: `1005295@mymail.sutd.edu.sg` , Password: `admin1234`  
 
 **Note :** You can also register your own email or any valid email to register as a user.  
