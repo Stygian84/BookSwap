@@ -1,5 +1,5 @@
 # Overview
-This BookSwap Project is completed within 24 hours (including the writing of this README.md). BookSwap is a web application designed to facilitate the exchange or trading of books between users. This web app aims to create a community-driven platform for book lovers to exchange books, connect with like-minded individuals, and expand their reading horizons. The real-time chat feature enhances communication between users, while the book listing and search functionalities make it easy for users to find the books they're interested in exchanging.
+This BookSwap Project is a proof of concept (POC) project completed within 24 hours (including the writing of this README.md). BookSwap is a web application designed to facilitate the exchange or trading of books between users. This web app aims to create a community-driven platform for book lovers to exchange books, connect with like-minded individuals, and expand their reading horizons. The real-time chat feature enhances communication between users, while the book listing and search functionalities make it easy for users to find the books they're interested in exchanging.
 
 # Link
 The web app can be accessed [here](https://bookswap-123.netlify.app) without any set up.
